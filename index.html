@@ -1,125 +1,237 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Portafolio</title>
-  <!-- Fuente de Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portafolio - Alexander Mendoza Cholima</title>
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Mi Portafolio</h1>
-    <button class="menu-toggle">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button> 
-    <nav>
-      <ul>
-        <li><a href="#about">Sobre Mí</a></li>
-        <li><a href="#skills">Habilidades</a></li>
-        <li><a href="#projects">Proyectos</a></li>
-        <li><a href="#contact">Contacto</a></li>
-      </ul>
-    </nav>
+  <!-- Header/Hero con datos personales -->
+  <header class="hero">
+    <div class="floating-buttons">
+      <button id="theme-toggle" aria-label="Cambiar tema" class="floating-buttons__button">
+        <div class="floating-buttons__icon">
+          <svg class="floating-buttons__icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><g><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></g></svg>
+          <svg class="floating-buttons__icon--moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+        </div>
+      </button>
+      <button id="language-toggle" aria-label="Cambiar idioma" class="floating-buttons__button">
+        <span class="floating-buttons__text">EN</span>
+      </button>
+    </div>
+    <div class="hero__container">
+      <div class="hero__info">
+        <h1 class="hero__title">Alexander Mendoza Cholima</h1>
+        <h2 class="hero__subtitle">Full Stack Software Developer</h2>
+        <p class="hero__location">
+          <span class="hero__location-icon"></span>
+          Santa Cruz, Bolivia
+        </p>
+        <div class="hero__social">
+          <!-- Íconos de contacto y/o links -->
+          <a href="mailto:alexander.mendoza.cholima2248@gmail.com" title="Email" class="hero__social-link" aria-label="Enviar correo electrónico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+          <a href="tel:+59160867473" title="Teléfono" class="hero__social-link" aria-label="Llamar por teléfono">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V21a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h4.09a2 2 0 0 1 2 1.72c.13 1.13.37 2.23.72 3.28a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c1.05.35 2.15.59 3.28.72A2 2 0 0 1 22 16.92z"/></svg>
+          </a>
+          <a href="https://github.com/tu-usuario" target="_blank" title="GitHub" class="hero__social-link" aria-label="Ir al perfil de GitHub">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.67.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/tu-usuario" target="_blank" title="LinkedIn" class="hero__social-link" aria-label="Ir al perfil de LinkedIn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><line x1="16" y1="11" x2="16" y2="16"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="8" y1="11" x2="8" y2="16"/><line x1="8" y1="8" x2="8" y2="8"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero__image">
+        <!-- Imagen de perfil (puede ser una foto tuya) -->
+        <img src="Imagen/Yo.png" alt="Retrato profesional de Alexander Mendoza Cholima sonriendo" />
+      </div>
+    </div>
   </header>
-  
+
   <main>
-    <!-- Sección Sobre Mí -->
-    <section id="about">
-      <h2>Sobre Mí</h2>
-      <p>
-        Hola, soy Alexander Mendoza Cholima, un desarrollador apasionado por la tecnología y la programación. 
-        Mi experiencia abarca desde desarrollo web hasta aplicaciones de escritorio, utilizando herramientas como 
-        HTML, CSS, JavaScript, C# y Windows Forms.
-      </p>
-    </section>
-    
-    <!-- Sección Habilidades con barras de progreso -->
-    <section id="skills">
-      <h2>Habilidades</h2>
-      <div class="skills-container">
-        <div class="skill">
-          <span class="skill-name">HTML</span>
-          <div class="progress-bar">
-            <div class="progress" data-progress="90"></div>
+    <!-- Sección Proyectos -->
+    <section id="projects" class="section">
+      <h2 data-lang="projects" class="section__title">Proyectos</h2>
+      <div class="projects">
+        <!-- Tarjeta 1 -->
+        <div class="projects__card">
+          <h3 data-lang="project1-title" class="projects__title">Fylo Dark Theme Landing Page</h3>
+          <p data-lang="project1-desc" class="projects__description">
+            Este proyecto representa una página de inicio con un diseño oscuro, ideal para
+            practicar habilidades en HTML y CSS, con maquetación responsive.
+          </p>
+          <div class="projects__tags">
+            <span class="projects__tag">HTML</span>
+            <span class="projects__tag">CSS</span>
+            <span class="projects__tag">JavaScript</span>
           </div>
         </div>
-        <div class="skill">
-          <span class="skill-name">CSS</span>
-          <div class="progress-bar">
-            <div class="progress" data-progress="85"></div>
+
+        <!-- Tarjeta 2 -->
+        <div class="projects__card">
+          <h3 data-lang="project2-title" class="projects__title">Huddle Landing Page</h3>
+          <p data-lang="project2-desc" class="projects__description">
+            Página de inicio con diseño visualmente atractivo y organizado, secciones curvas
+            y un aspecto moderno. Ideal para practicar maquetación avanzada.
+          </p>
+          <div class="projects__tags">
+            <span class="projects__tag">HTML</span>
+            <span class="projects__tag">CSS</span>
           </div>
         </div>
-        <div class="skill">
-          <span class="skill-name">JavaScript</span>
-          <div class="progress-bar">
-            <div class="progress" data-progress="80"></div>
+
+        <!-- Tarjeta 3 -->
+        <div class="projects__card">
+          <h3 data-lang="project3-title" class="projects__title">Juego de Rompecabezas</h3>
+          <p data-lang="project3-desc" class="projects__description">
+            Desarrollado en JavaScript, con diferentes niveles de dificultad y un registro de
+            puntuaciones. Permite practicar la manipulación del DOM y manejo de eventos.
+          </p>
+          <div class="projects__tags">
+            <span class="projects__tag">HTML</span>
+            <span class="projects__tag">CSS</span>
+            <span class="projects__tag">JavaScript</span>
           </div>
         </div>
-        <div class="skill">
-          <span class="skill-name">C#</span>
-          <div class="progress-bar">
-            <div class="progress" data-progress="75"></div>
+
+        <!-- Tarjeta 4 -->
+        <div class="projects__card">
+          <h3 data-lang="project4-title" class="projects__title">Reproductor Musical</h3>
+          <p data-lang="project4-desc" class="projects__description">
+            Aplicación web que reproduce pistas de audio con una interfaz personalizable,
+            utilizando HTML5 Audio API y un diseño responsivo.
+          </p>
+          <div class="projects__tags">
+            <span class="projects__tag">HTML</span>
+            <span class="projects__tag">CSS</span>
+            <span class="projects__tag">JavaScript</span>
           </div>
         </div>
-        <div class="skill">
-          <span class="skill-name">Windows Forms</span>
-          <div class="progress-bar">
-            <div class="progress" data-progress="70"></div>
+
+        <!-- Tarjeta 5 -->
+        <div class="projects__card">
+          <h3 data-lang="project5-title" class="projects__title">Memorama</h3>
+          <p data-lang="project5-desc" class="projects__description">
+            Juego de cartas tipo "memory" con contadores de tiempo y movimientos,
+            implementado con JavaScript y animaciones en CSS.
+          </p>
+          <div class="projects__tags">
+            <span class="projects__tag">HTML</span>
+            <span class="projects__tag">CSS</span>
+            <span class="projects__tag">JavaScript</span>
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- Sección Proyectos interactiva -->
-    <section id="projects">
-      <h2>Proyectos</h2>
-      <div class="projects-container">
-        <div class="project-card" data-title="Proyecto 1" data-description="Este proyecto demuestra mi habilidad en desarrollo web utilizando HTML, CSS y JavaScript. Se implementaron animaciones y un diseño responsivo para una experiencia de usuario óptima." data-image="https://via.placeholder.com/300x200">
-          <img src="https://via.placeholder.com/300x200" alt="Proyecto 1">
-          <h3>Proyecto 1</h3>
-          <p>Descripción corta del proyecto 1.</p>
-          <button class="open-modal">Ver más</button>
-        </div>
-        <div class="project-card" data-title="Proyecto 2" data-description="Este proyecto demuestra mi habilidad en el desarrollo de aplicaciones de escritorio con C# y Windows Forms, ofreciendo una interfaz intuitiva y funcional." data-image="https://via.placeholder.com/300x200">
-          <img src="https://via.placeholder.com/300x200" alt="Proyecto 2">
-          <h3>Proyecto 2</h3>
-          <p>Descripción corta del proyecto 2.</p>
-          <button class="open-modal">Ver más</button>
-        </div>
-        <!-- Puedes agregar más tarjetas de proyectos -->
+
+    <!-- Sección Habilidades (chips) -->
+    <section id="skills" class="section">
+      <h2 data-lang="skills" class="section__title">Habilidades</h2>
+      <div class="skills">
+        <span class="skills__tag" title="HTML5" aria-label="HTML5"><i class="fab fa-html5"></i></span>
+        <span class="skills__tag" title="CSS3" aria-label="CSS3"><i class="fab fa-css3-alt"></i></span>
+        <span class="skills__tag" title="JavaScript" aria-label="JavaScript"><i class="fab fa-js"></i></span>
+        <span class="skills__tag" title="TypeScript" aria-label="TypeScript"><i class="fab fa-js"></i></span>
+        <span class="skills__tag" title="React" aria-label="React"><i class="fab fa-react"></i></span>
+        <span class="skills__tag" title="Node.js" aria-label="Node.js"><i class="fab fa-node-js"></i></span>
+        <span class="skills__tag" title="C#" aria-label="C Sharp"><i class="fas fa-hashtag"></i></span>
+        <span class="skills__tag" title="Windows Forms" aria-label="Windows Forms"><i class="fab fa-windows"></i></span>
+        <span class="skills__tag" title="Git" aria-label="Git"><i class="fab fa-git-alt"></i></span>
+        <span class="skills__tag" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></span>
       </div>
     </section>
-    
-    <!-- Sección Contacto -->
-    <section id="contact">
-      <h2>Contacto</h2>
-      <p>Puedes encontrarme en mis redes sociales:</p>
-      <ul class="social-icons">
-        <li><a href="https://linkedin.com/in/tu-usuario" target="_blank">LinkedIn</a></li>
-        <li><a href="https://github.com/tu-usuario" target="_blank">GitHub</a></li>
-        <li><a href="https://twitter.com/tu-usuario" target="_blank">Twitter</a></li>
-      </ul>
+
+    <!-- Sección Certificaciones -->
+    <section id="certifications" class="section">
+      <h2 data-lang="certifications" class="section__title">Certificaciones</h2>
+      <div class="certifications">
+        <div class="certifications__item">
+          <h3 class="certifications__title">IT Essentials: PC Hardware and Software</h3>
+          <p class="certifications__institution">Cisco Networking Academy</p>
+          <span class="certifications__date">30-06-2024</span>
+          <a href="#" class="certifications__link">Ver el certificado</a>
+        </div>
+        <div class="certifications__item">
+          <h3 class="certifications__title">CURSO CSS3 [Aprende y DOMINA CSS3]</h3>
+          <p class="certifications__institution">Udemy</p>
+          <span class="certifications__date">26-12-2023</span>
+          <a href="#" class="certifications__link">Ver el certificado</a>
+        </div>
+        <div class="certifications__item">
+          <h3 class="certifications__title">Information Technology Specialist in JavaScript</h3>
+          <p class="certifications__institution">Microsoft / Certiport</p>
+          <span class="certifications__date">06-07-2023</span>
+          <a href="#" class="certifications__link">Ver el certificado</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Experiencia Laboral -->
+    <section id="experience" class="section">
+      <h2 data-lang="experience" class="section__title">Experiencia Laboral</h2>
+      <div class="experience">
+        <div class="experience__item">
+          <h3 data-lang="exp1-company" class="experience__company">Broisin Solutions</h3>
+          <p class="experience__role" data-lang="exp1-role">Frontend Developer (2022 - 2024)</p>
+          <p data-lang="exp1-desc" class="experience__description">
+            En este proyecto realicé mejoras visuales al frontend del sistema de cafetería, además de 
+            implementar endpoints desde la lado frontend y optimizar el código de producción.
+          </p>
+          <div class="experience__tags">
+            <span class="skills__tag" title="Astro"><i class="fas fa-rocket"></i></span>
+            <span class="skills__tag" title="Tailwind"><i class="fas fa-wind"></i></span>
+            <span class="skills__tag" title="JavaScript"><i class="fab fa-js"></i></span>
+            <span class="skills__tag" title="TypeScript"><i class="fab fa-js"></i></span>
+            <span class="skills__tag" title="React"><i class="fab fa-react"></i></span>
+          </div>
+        </div>
+
+        <div class="experience__item">
+          <h3 data-lang="exp2-company" class="experience__company">OUTRISE Studios</h3>
+          <p class="experience__role" data-lang="exp2-role">Videogame Developer (2024 - Presente)</p>
+          <p data-lang="exp2-desc" class="experience__description">
+            Implementé mecánicas de juego innovadoras, colaborando con un equipo multidisciplinario para
+            garantizar una experiencia de juego atractiva y fluida. Además, realicé una auditoría completa
+            del proyecto para optimizar y eliminar componentes innecesarios.
+          </p>
+          <div class="experience__tags">
+            <span class="skills__tag" title="Unity"><i class="fas fa-gamepad"></i></span>
+            <span class="skills__tag" title="C#"><i class="fas fa-hashtag"></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contact" class="section">
+      <h2 data-lang="contact" class="section__title">Contacto</h2>
+      <form id="contact-form" class="contact-form">
+        <div class="contact-form__group">
+          <label for="email" data-lang="email" class="contact-form__label">Correo Electrónico</label>
+          <input type="email" id="email" name="email" placeholder="tu@correo.com" class="contact-form__input" required aria-required="true">
+        </div>
+        <div class="contact-form__group">
+          <label for="message" data-lang="message" class="contact-form__label">Mensaje</label>
+          <textarea id="message" name="message" rows="5" placeholder="Escribe tu mensaje aquí..." class="contact-form__textarea" required aria-required="true"></textarea>
+        </div>
+        <button type="submit" class="contact-form__submit" data-lang="send">Enviar Mensaje</button>
+      </form>
     </section>
   </main>
-  
-  <footer>
-    <p>&copy; 2025 Alexander Mendoza Cholima</p>
+
+  <footer class="footer">
+    <p class="footer__copyright">&copy; 2025 Alexander Mendoza Cholima</p>
   </footer>
-  
-  <!-- Modal para proyectos -->
-  <div id="project-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-modal">&times;</span>
-      <img id="modal-image" src="" alt="Proyecto">
-      <h3 id="modal-title"></h3>
-      <p id="modal-description"></p>
-    </div>
-  </div>
-  
+
   <script src="script.js"></script>
 </body>
 </html>
