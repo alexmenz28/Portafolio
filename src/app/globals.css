@@ -483,6 +483,12 @@ body {
 }
 
 @media (max-width: 767px) {
+  .chrome-control-shortcut {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
   .site-chrome {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }

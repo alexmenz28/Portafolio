@@ -1,5 +1,5 @@
 export type ProjectLinks = {
-  id: "memories" | "joyeria" | "minimarket" | "notas";
+  id: "memories" | "joyeria" | "fastfood";
   live?: string;
   repo?: string;
 };
@@ -15,13 +15,8 @@ export const featuredProjects: ProjectLinks[] = [
     repo: "https://github.com/alexmenz28/Joyeria-MARR",
   },
   {
-    id: "minimarket",
-    repo: "https://github.com/alexmenz28/MinimarketJade",
-  },
-  {
-    id: "notas",
-    live: "https://notas-docusaurus.vercel.app",
-    repo: "https://github.com/alexmenz28/Notas-Docusaurus",
+    id: "fastfood",
+    repo: "https://github.com/alexmenz28/fast-food",
   },
 ];
 
