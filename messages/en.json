@@ -44,15 +44,10 @@
         "description": "Jewelry management and sales system: ASP.NET Core API, EF Core, SQL Server, JWT, Cloudinary, and a React + Tailwind SPA—with integration tests.",
         "stack": "ASP.NET Core · React · SQL Server · Tailwind"
       },
-      "minimarket": {
-        "title": "Minimarket Jade",
-        "description": "UTEPSA integrator project: sales, inventory, purchases, customers, reports, and KPIs on Blazor Server with ASP.NET Core and SQL Server.",
-        "stack": "Blazor Server · ASP.NET Core · SQL Server · EF Core"
-      },
-      "notas": {
-        "title": "Notas Docusaurus",
-        "description": "Personal knowledge base on software architecture, databases, OOP, agile practices, and web stacks—documented as I learn.",
-        "stack": "Docusaurus · TypeScript · Markdown"
+      "fastfood": {
+        "title": "FAST FOOD S.A.",
+        "description": "Supply and inventory monorepo for a fast-food distributor: catalogs, central warehouse stock, and daily supply runs to mobile units—Fastify API, Vite + React SPA, Prisma on PostgreSQL, with shared domain packages.",
+        "stack": "Fastify · React · Prisma · PostgreSQL · TypeScript"
       }
     }
   },
@@ -68,7 +63,8 @@
         "bullets": [
           "Maintained and extended the SAF backoffice (DevExpress XAF / .NET), resolving incidents and shipping modules for operational areas.",
           "Designed and delivered Blazor Server modules end to end: UI, SQL Server schema, stored procedures, and triggers.",
-          "Built operational screens with DevExpress (forms, grids, reports) aligned to internal workflows."
+          "Built operational screens with DevExpress (forms, grids, reports) aligned to internal workflows.",
+          "Worked in an Agile team using Scrum and XP—sprints, backlog refinement, and iterative releases tied to operational needs."
         ]
       }
     }
