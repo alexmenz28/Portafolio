@@ -1,0 +1,227 @@
+{
+  "Meta": {
+    "title": "Alexander Mendoza Cholima — Desarrollador Full-Stack",
+    "description": "Ingeniero en sistemas: productos en .NET y web moderna. Creador de Personal Memories. Abierto a roles remotos."
+  },
+  "Nav": {
+    "hero": "Inicio",
+    "projects": "Proyectos",
+    "experience": "Experiencia",
+    "skills": "Habilidades",
+    "about": "Sobre mí",
+    "contact": "Contacto",
+    "education": "Educación",
+    "timeline": "Secciones de la página",
+    "controls": "Controles de la página",
+    "shortcut": "Atajo: {key}",
+    "themeLight": "Cambiar a tema claro",
+    "themeDark": "Cambiar a tema oscuro",
+    "language": "Idioma"
+  },
+  "Hero": {
+    "role": "Desarrollador Full-Stack · .NET y Web",
+    "location": "Santa Cruz, Bolivia · Abierto a remoto",
+    "tagline": "Entrego sistemas en producción con .NET y stacks web modernos—desde software operativo universitario hasta productos en vivo como Personal Memories.",
+    "ctaProjects": "Ver proyectos",
+    "ctaContact": "Contactar",
+    "photoAlt": "Retrato de Alexander Mendoza Cholima"
+  },
+  "Projects": {
+    "title": "Trabajo destacado",
+    "subtitle": "Productos en vivo y repos públicos que un reclutador puede abrir en un clic.",
+    "live": "Sitio en vivo",
+    "repo": "GitHub",
+    "allRepos": "Ver todos los repositorios públicos en GitHub →",
+    "items": {
+      "memories": {
+        "title": "Personal Memories",
+        "description": "App web en producción para registrar fechas importantes, personas y el contexto que necesitas cuando llega el momento—lugares, ideas de regalo y notas personales.",
+        "stack": "Next.js · TypeScript · Auth · Vercel"
+      },
+      "joyeria": {
+        "title": "Joyería MARR",
+        "description": "Sistema de gestión y venta de joyería: API ASP.NET Core, EF Core, SQL Server, JWT, Cloudinary y SPA React + Tailwind—con tests de integración.",
+        "stack": "ASP.NET Core · React · SQL Server · Tailwind"
+      },
+      "minimarket": {
+        "title": "Minimarket Jade",
+        "description": "Proyecto integrador UTEPSA: ventas, inventario, compras, clientes, reportes y KPI en Blazor Server con ASP.NET Core y SQL Server.",
+        "stack": "Blazor Server · ASP.NET Core · SQL Server · EF Core"
+      },
+      "notas": {
+        "title": "Notas Docusaurus",
+        "description": "Biblioteca personal de conocimiento sobre arquitectura, bases de datos, POO, ágil y stacks web—documentada mientras aprendo.",
+        "stack": "Docusaurus · TypeScript · Markdown"
+      }
+    }
+  },
+  "Experience": {
+    "title": "Experiencia",
+    "subtitle": "Software de producción para una universidad—backoffice y módulos de punta a punta.",
+    "items": {
+      "utepsa": {
+        "company": "UTEPSA",
+        "role": "Programador",
+        "period": "Ene 2025 – Dic 2025",
+        "location": "Santa Cruz, Bolivia",
+        "bullets": [
+          "Mantuve y amplié el backoffice SAF (DevExpress XAF / .NET), resolviendo incidencias y entregando módulos para áreas operativas.",
+          "Diseñé e implementé módulos Blazor Server de punta a punta: interfaz, esquema SQL Server, procedimientos almacenados y triggers.",
+          "Construí pantallas operativas con DevExpress (formularios, grillas y reportes) alineadas a flujos internos."
+        ]
+      }
+    }
+  },
+  "Education": {
+    "title": "Educación",
+    "subtitle": "Ingeniería en sistemas con laboratorio práctico y programación competitiva.",
+    "school": "UTEPSA",
+    "degree": "Ingeniería en Sistemas, Graduado",
+    "period": "2021 – 2026",
+    "location": "Santa Cruz, Bolivia",
+    "bullets": [
+      "Apoyé la configuración, el mantenimiento y la operación del Laboratorio de Sistemas y Redes.",
+      "Competí en certámenes de programación ICPC (International Collegiate Programming Contest)."
+    ]
+  },
+  "Skills": {
+    "title": "Habilidades",
+    "subtitle": "Herramientas con las que entrego, agrupadas como trabajo de verdad.",
+    "groups": {
+      "languages": {
+        "label": "Lenguajes",
+        "items": "C# · TypeScript / JavaScript · SQL · Python · Node.js"
+      },
+      "dotnet": {
+        "label": ".NET",
+        "items": ".NET · Blazor Server · DevExpress XAF / UI · Entity Framework · SQL Server"
+      },
+      "web": {
+        "label": "Web",
+        "items": "React · Next.js · Tailwind CSS · ASP.NET Core · PostgreSQL · Prisma"
+      },
+      "tools": {
+        "label": "Servicios y calidad",
+        "items": "Git · Docker · Sentry · Better Auth · Inngest · Resend · Linux"
+      }
+    }
+  },
+  "About": {
+    "title": "Sobre mí",
+    "body": "Soy graduado de Ingeniería en Sistemas en UTEPSA (2021–2026) en Santa Cruz, Bolivia. Me gustan los sistemas claros: esquemas que sostienen, interfaces calmadas y código que otros puedan mantener. Además de la carrera, apoyé laboratorios de sistemas/redes, competí en ICPC, entregué software universitario en .NET y lancé Personal Memories como producto en vivo. Busco roles remotos donde se encuentren profundidad en .NET y oficio web moderno.",
+    "availability": "Abierto a remoto · Inglés (intermedio) · Español (nativo)"
+  },
+  "Contact": {
+    "title": "Contacto",
+    "subtitle": "Email o GitHub para oportunidades. Personal Memories está en vivo si quieres ver un producto.",
+    "email": "Correo",
+    "github": "GitHub",
+    "product": "Personal Memories"
+  },
+  "Footer": {
+    "rights": "© {year} Alexander Mendoza Cholima"
+  },
+  "UiLab": {
+    "metaTitle": "UI Lab — Elección de componentes",
+    "metaDescription": "Galería interna de variantes UI para el portafolio Glacial.",
+    "title": "UI Lab",
+    "subtitle": "Compara patrones frente a una dirección Glacial mínima y profesional. Lo marcado Recomendado encaja mejor con tu idea.",
+    "back": "Volver al portafolio",
+    "recommended": "Recomendado",
+    "optional": "Opcional",
+    "avoid": "Mejor evitar",
+    "toc": "En esta página",
+    "sections": {
+      "intent": "Intención de diseño",
+      "buttons": "Botones",
+      "links": "Enlaces y acciones de texto",
+      "cards": "Cards",
+      "tags": "Tags y chips",
+      "tables": "Tablas",
+      "forms": "Controles de formulario",
+      "nav": "Navegación",
+      "headings": "Títulos y secciones",
+      "lists": "Listas y timeline",
+      "feedback": "Feedback",
+      "motion": "Señales de motion"
+    },
+    "intentBody": "Prioriza claridad, superficies calmadas y pocas interacciones intencionales. Prefiere bordes y espacio frente a sombras, pills y decoración.",
+    "motionLab": "Motion Lab →"
+  },
+  "MotionLab": {
+    "metaTitle": "Motion Lab — Elección de animaciones",
+    "metaDescription": "Galería interna de animaciones para el portafolio Glacial.",
+    "title": "Motion Lab",
+    "subtitle": "Previsualiza entradas, hovers y scroll. Usa Replay para ver cada una de nuevo. Recomendado = encaja con tu brief minimalista y profesional.",
+    "back": "Volver al portafolio",
+    "uiLab": "UI Lab →",
+    "replay": "Repetir",
+    "recommended": "Recomendado",
+    "optional": "Opcional",
+    "avoid": "Mejor evitar",
+    "intent": "Elige 2–3 motions en total: stagger en hero, hover en cards, scroll reveal opcional. Respeta prefers-reduced-motion.",
+    "sections": {
+      "entry": "Carga / entrada",
+      "hover": "Hover e interacción",
+      "scroll": "Scroll",
+      "avoid": "Mejor omitir"
+    },
+    "items": {
+      "fadeUp": {
+        "title": "Fade up",
+        "note": "Ya en el hero. Calmo y profesional. 12px + opacidad."
+      },
+      "stagger": {
+        "title": "Fade up escalonado",
+        "note": "Rol → nombre → tagline con delays de 0.12s. Mejor patrón para tu hero."
+      },
+      "fadeIn": {
+        "title": "Solo fade in",
+        "note": "Más discreto que fade-up. Bueno para texto secundario."
+      },
+      "slideLeft": {
+        "title": "Slide desde la izquierda",
+        "note": "Un poco editorial. OK en títulos de sección, no en toda la página."
+      },
+      "slideUpSoft": {
+        "title": "Slide up suave",
+        "note": "Más recorrido que fade-up. Úsalo en un solo bloque."
+      },
+      "cardHover": {
+        "title": "Borde + barra de acento",
+        "note": "Cards de proyecto: borde más vivo, barra crece. Sin sombra."
+      },
+      "linkUnderline": {
+        "title": "Subrayado que crece",
+        "note": "Nav o links inline. Sutil, no subrayado fijo siempre."
+      },
+      "buttonHover": {
+        "title": "CTA cambio de color",
+        "note": "secondary → primary al hover, 300ms. Como tus botones actuales."
+      },
+      "scrollReveal": {
+        "title": "Reveal al scroll",
+        "note": "Secciones tras el hero entran una vez al ~35% visible."
+      },
+      "smoothScroll": {
+        "title": "Scroll suave a anclas",
+        "note": "Ya en html. Suficiente para nav one-page."
+      },
+      "bounce": {
+        "title": "Bounce in",
+        "note": "Juvenil / genérico. Choca con Glacial."
+      },
+      "pulse": {
+        "title": "Pulse infinito",
+        "note": "Llama atención pero ruidoso en un portafolio."
+      }
+    },
+    "pickTitle": "Combo sugerido para tu sitio",
+    "pick": {
+      "hero": "Hero: fade-up escalonado (actual)",
+      "cards": "Proyectos: hover borde + barra (actual)",
+      "sections": "Opcional: scroll reveal en Experience / Projects",
+      "skip": "Evitar: bounce, pulse, parallax, typewriter"
+    }
+  }
+}
