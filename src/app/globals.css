@@ -300,6 +300,11 @@ body {
   padding: 0.75rem 1rem 0.5rem;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+}
+
+.timeline-h-scroll--onboarding {
+  scroll-snap-type: none;
 }
 
 .timeline-h-scroll::-webkit-scrollbar {
@@ -598,6 +603,14 @@ html.horizontal-shell body {
 }
 
 .horizontal-track--dragging .horizontal-panel-inner--enter {
+  animation: none !important;
+}
+
+.horizontal-track--onboarding {
+  pointer-events: none;
+}
+
+.horizontal-track--onboarding .horizontal-panel-inner--enter {
   animation: none !important;
 }
 

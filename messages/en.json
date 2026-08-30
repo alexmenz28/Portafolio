@@ -16,7 +16,8 @@
     "shortcut": "Shortcut: {key}",
     "themeLight": "Switch to light theme",
     "themeDark": "Switch to dark theme",
-    "language": "Language"
+    "language": "Language",
+    "swipeHint": "Swipe sideways to explore sections"
   },
   "Hero": {
     "role": "Full-Stack Developer · .NET & Web",

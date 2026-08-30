@@ -9,6 +9,15 @@ import {
 } from "react";
 import { usePageNavigation } from "@/contexts/PageNavigationContext";
 import { PAGE_SECTIONS } from "@/data/sections";
+import {
+  animateTrackPeek,
+  hasSeenSwipeOnboarding,
+  isMobileViewport,
+  markSwipeOnboardingSeen,
+  prefersReducedMotion,
+  TIMELINE_SWIPE_HINT_EVENT,
+  wait,
+} from "@/lib/swipe-onboarding";
 
 type Props = {
   children: ReactNode;
@@ -16,10 +25,6 @@ type Props = {
 
 const SWIPE_COMMIT_RATIO = 0.22;
 const INTENT_THRESHOLD = 10;
-
-function isMobileViewport() {
-  return window.matchMedia("(max-width: 767px)").matches;
-}
 
 function clampDrag(
   index: number,
@@ -41,6 +46,7 @@ export function HorizontalPage({ children }: Props) {
   const touchIntent = useRef<"none" | "vertical" | "horizontal">("none");
   const dragBaseIndex = useRef(0);
   const isDragging = useRef(false);
+  const onboardingStarted = useRef(false);
 
   activeIndexRef.current = activeIndex;
 
@@ -76,6 +82,47 @@ export function HorizontalPage({ children }: Props) {
       ".horizontal-panel--active .horizontal-panel-inner",
     );
     if (inner instanceof HTMLElement) inner.scrollTop = 0;
+  }, [activeIndex]);
+
+  useEffect(() => {
+    if (!isMobileViewport() || prefersReducedMotion()) return;
+    if (hasSeenSwipeOnboarding()) return;
+    if (activeIndex !== 0) return;
+    if (onboardingStarted.current) return;
+
+    onboardingStarted.current = true;
+
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!viewport || !track) return;
+
+    let cancelled = false;
+
+    const cancelOnInteraction = () => {
+      cancelled = true;
+      markSwipeOnboardingSeen();
+    };
+
+    viewport.addEventListener("touchstart", cancelOnInteraction, {
+      once: true,
+      passive: true,
+    });
+
+    const run = async () => {
+      await wait(750);
+      if (cancelled || hasSeenSwipeOnboarding()) return;
+
+      await animateTrackPeek(track, activeIndexRef.current, viewport.clientWidth);
+      if (cancelled) return;
+
+      window.dispatchEvent(new CustomEvent(TIMELINE_SWIPE_HINT_EVENT));
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
   }, [activeIndex]);
 
   useEffect(() => {

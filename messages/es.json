@@ -16,7 +16,8 @@
     "shortcut": "Atajo: {key}",
     "themeLight": "Cambiar a tema claro",
     "themeDark": "Cambiar a tema oscuro",
-    "language": "Idioma"
+    "language": "Idioma",
+    "swipeHint": "Desliza hacia los lados para explorar las secciones"
   },
   "Hero": {
     "role": "Desarrollador Full-Stack · .NET y Web",
