@@ -1,7 +1,7 @@
 {
   "Meta": {
-    "title": "Alexander Mendoza Cholima — Full-Stack Developer",
-    "description": "Systems engineer building .NET and modern web products. Creator of Personal Memories. Open to remote roles."
+    "title": "Alexander Mendoza Cholima — Full-Stack TypeScript Developer",
+    "description": "Full-stack TypeScript engineer who ships production web products—Next.js, Node, PostgreSQL. Creator of Personal Memories. Open to remote roles."
   },
   "Nav": {
     "hero": "Home",
@@ -17,12 +17,12 @@
     "themeLight": "Switch to light theme",
     "themeDark": "Switch to dark theme",
     "language": "Language",
-    "swipeHint": "Swipe sideways to explore sections"
+    "swipeHint": "Swipe the page or the section bar below — drag farther to skip ahead"
   },
   "Hero": {
-    "role": "Full-Stack Developer · .NET & Web",
+    "role": "Full-Stack TypeScript · Web products",
     "location": "Santa Cruz, Bolivia · Open to remote",
-    "tagline": "I ship production systems in .NET and modern web stacks—from university operations software to live products like Personal Memories.",
+    "tagline": "I ship production web products end to end—TypeScript, Next.js, Node, and PostgreSQL—plus enterprise .NET experience from university systems. Live sample: Personal Memories.",
     "ctaProjects": "View projects",
     "ctaContact": "Get in touch",
     "photoAlt": "Portrait of Alexander Mendoza Cholima"
@@ -37,7 +37,7 @@
       "memories": {
         "title": "Personal Memories",
         "description": "Production web app to track important dates, people, and the context you need when the moment arrives—places, gift ideas, and personal notes.",
-        "stack": "Next.js · TypeScript · Auth · Vercel"
+        "stack": "Next.js · TypeScript · PostgreSQL · Prisma · Better Auth · Vercel"
       },
       "joyeria": {
         "title": "Joyería MARR",
@@ -85,27 +85,27 @@
     "title": "Skills",
     "subtitle": "Tools I use to ship—grouped the way I actually work.",
     "groups": {
+      "web": {
+        "label": "Web & product",
+        "items": "TypeScript · React · Next.js · Node.js · Fastify · Tailwind · PostgreSQL · Prisma"
+      },
       "languages": {
         "label": "Languages",
-        "items": "C# · TypeScript / JavaScript · SQL · Python · Node.js"
-      },
-      "dotnet": {
-        "label": ".NET",
-        "items": ".NET · Blazor Server · DevExpress XAF / UI · Entity Framework · SQL Server"
-      },
-      "web": {
-        "label": "Web",
-        "items": "React · Next.js · Tailwind CSS · ASP.NET Core · PostgreSQL · Prisma"
+        "items": "TypeScript / JavaScript · C# · SQL · Python"
       },
       "tools": {
         "label": "Services & quality",
-        "items": "Git · Docker · Sentry · Better Auth · Inngest · Resend · Linux"
+        "items": "Git · Docker · Sentry · Better Auth · Inngest · Resend · Linux · Notion"
+      },
+      "dotnet": {
+        "label": "Also · .NET",
+        "items": "ASP.NET Core · Blazor Server · EF Core · SQL Server · DevExpress XAF / UI"
       }
     }
   },
   "About": {
     "title": "About",
-    "body": "I'm a Systems Engineering graduate from UTEPSA (2021–2026) in Santa Cruz, Bolivia. I like clear systems: schemas that hold up, calm interfaces, and code others can maintain. Beyond classwork I've supported systems/network labs, competed in ICPC, shipped university software in .NET, and launched Personal Memories as a live product. I'm looking for remote roles where .NET depth and modern web craft meet.",
+    "body": "I'm a Systems Engineering graduate from UTEPSA (2021–2026) in Santa Cruz, Bolivia. I like clear systems: schemas that hold up, calm interfaces, and code others can maintain. I've shipped Personal Memories as a live TypeScript product, built university software in .NET, supported systems/network labs, and competed in ICPC. I'm looking for remote roles where modern web craft meets reliable delivery.",
     "availability": "Open to remote · English (intermediate) · Spanish (native)"
   },
   "Contact": {

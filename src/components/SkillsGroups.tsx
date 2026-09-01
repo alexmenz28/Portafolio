@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { ScrambleText } from "@/components/ScrambleText";
 
-const GROUP_KEYS = ["dotnet", "web", "languages", "tools"] as const;
+const GROUP_KEYS = ["web", "languages", "tools", "dotnet"] as const;
 
 export function SkillsGroups() {
   const t = useTranslations("Skills");

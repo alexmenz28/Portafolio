@@ -8,13 +8,19 @@ import { usePageNavigation } from "@/contexts/PageNavigationContext";
 import { PAGE_SECTIONS } from "@/data/sections";
 import { ScrambleText } from "@/components/ScrambleText";
 import {
+  clampWheelTranslate,
+  findCenteredStepIndex,
+  translateToCenterStep,
+} from "@/lib/page-navigation";
+import {
   animateTimelinePeek,
   hasSeenSwipeOnboarding,
-  isMobileViewport,
   markSwipeOnboardingSeen,
   prefersReducedMotion,
   TIMELINE_SWIPE_HINT_EVENT,
 } from "@/lib/swipe-onboarding";
+
+const WHEEL_INTENT_THRESHOLD = 8;
 
 export function SiteChrome() {
   const t = useTranslations("Nav");
@@ -23,55 +29,134 @@ export function SiteChrome() {
   const scrollRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const activeIndexRef = useRef(0);
+  const wheelTranslateRef = useRef(0);
+  const centeredIndexRef = useRef(0);
   const onboardingRunning = useRef(false);
-  const { activeIndex, goTo } = usePageNavigation();
+  const wheelTouch = useRef<{ startX: number; startTranslate: number } | null>(
+    null,
+  );
+  const wheelIntent = useRef<"none" | "horizontal">("none");
+  const [wheelMode, setWheelMode] = useState(false);
+  const [wheelDragging, setWheelDragging] = useState(false);
+  const { activeIndex, goTo, goToIndex } = usePageNavigation();
+  const [rail, setRail] = useState({ left: 0, width: 0 });
   const [progress, setProgress] = useState({ left: 0, width: 0 });
+
+  activeIndexRef.current = activeIndex;
+
+  const getTranslateBounds = useCallback(() => {
+    const scroll = scrollRef.current;
+    const first = stepRefs.current[0];
+    const last = stepRefs.current[PAGE_SECTIONS.length - 1];
+    if (!scroll || !first || !last) {
+      return { min: 0, max: 0 };
+    }
+
+    const max = translateToCenterStep(
+      scroll.clientWidth,
+      first.offsetLeft,
+      first.offsetWidth,
+    );
+    const min = translateToCenterStep(
+      scroll.clientWidth,
+      last.offsetLeft,
+      last.offsetWidth,
+    );
+
+    return { min, max };
+  }, []);
+
+  const getTranslateForIndex = useCallback((index: number) => {
+    const scroll = scrollRef.current;
+    const step = stepRefs.current[index];
+    if (!scroll || !step) return 0;
+
+    return translateToCenterStep(
+      scroll.clientWidth,
+      step.offsetLeft,
+      step.offsetWidth,
+    );
+  }, []);
+
+  const applyWheelTranslate = useCallback(
+    (translate: number, animated: boolean) => {
+      const track = trackRef.current;
+      if (!track || !wheelMode) return;
+
+      wheelTranslateRef.current = translate;
+      track.style.transition = animated ? "" : "none";
+      track.classList.toggle("timeline-h-track--dragging", !animated);
+      track.style.transform = `translateX(${translate}px)`;
+    },
+    [wheelMode],
+  );
+
+  const syncCenteredSection = useCallback(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+
+    const centered = findCenteredStepIndex(scroll, stepRefs.current);
+    centeredIndexRef.current = centered;
+
+    if (centered !== activeIndexRef.current) {
+      goToIndex(centered);
+    }
+  }, [goToIndex]);
 
   const syncProgress = useCallback(() => {
     const track = trackRef.current;
     if (!track) return;
 
-    const rail = track.querySelector(".timeline-h-rail");
     const steps = track.querySelectorAll<HTMLElement>(".timeline-h-step");
-    const activeStep = steps[activeIndex];
+    const activeStep = steps[activeIndexRef.current];
     const firstStep = steps[0];
+    const lastStep = steps[steps.length - 1];
 
-    if (!rail || !activeStep || !firstStep) return;
+    if (!activeStep || !firstStep || !lastStep) return;
 
-    const railRect = rail.getBoundingClientRect();
     const firstNode = firstStep.querySelector(".timeline-node");
     const activeNode = activeStep.querySelector(".timeline-node");
-    if (!firstNode || !activeNode) return;
+    const lastNode = lastStep.querySelector(".timeline-node");
+    if (!firstNode || !activeNode || !lastNode) return;
 
-    const firstRect = firstNode.getBoundingClientRect();
-    const activeRect = activeNode.getBoundingClientRect();
-    const start = firstRect.left + firstRect.width / 2 - railRect.left;
-    const end = activeRect.left + activeRect.width / 2 - railRect.left;
+    const trackRect = track.getBoundingClientRect();
+    const nodeCenterX = (rect: DOMRect) => rect.left + rect.width / 2;
 
-    setProgress({ left: start, width: Math.max(0, end - start) });
-  }, [activeIndex]);
+    const firstX = nodeCenterX(firstNode.getBoundingClientRect());
+    const activeX = nodeCenterX(activeNode.getBoundingClientRect());
+    const lastX = nodeCenterX(lastNode.getBoundingClientRect());
 
-  const scrollActiveStepIntoView = useCallback(
-    (behavior: ScrollBehavior = "smooth") => {
-      if (!isMobileViewport()) return;
+    const railLeft = firstX - trackRect.left;
+    const railWidth = lastX - firstX;
 
-      const scroll = scrollRef.current;
-      const step = stepRefs.current[activeIndex];
-      if (!scroll || !step) return;
+    setRail({ left: railLeft, width: Math.max(0, railWidth) });
+    setProgress({
+      left: railLeft,
+      width: Math.max(0, activeX - firstX),
+    });
+  }, []);
 
-      const scrollRect = scroll.getBoundingClientRect();
-      const stepRect = step.getBoundingClientRect();
-      const target =
-        scroll.scrollLeft +
-        (stepRect.left + stepRect.width / 2 - (scrollRect.left + scrollRect.width / 2));
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const syncMode = () => {
+      const mobile = mq.matches;
+      setWheelMode(mobile);
+      scrollRef.current?.classList.toggle("timeline-h-scroll--wheel", mobile);
+      trackRef.current?.classList.toggle("timeline-h-track--wheel", mobile);
+      if (!mobile) {
+        trackRef.current?.style.removeProperty("transform");
+        trackRef.current?.classList.remove("timeline-h-track--dragging");
+      } else {
+        const translate = getTranslateForIndex(activeIndexRef.current);
+        applyWheelTranslate(translate, false);
+      }
+    };
 
-      scroll.scrollTo({
-        left: Math.max(0, target),
-        behavior,
-      });
-    },
-    [activeIndex],
-  );
+    syncMode();
+    mq.addEventListener("change", syncMode);
+    return () => mq.removeEventListener("change", syncMode);
+  }, [applyWheelTranslate, getTranslateForIndex]);
 
   useEffect(() => {
     const node = headerRef.current;
@@ -98,30 +183,141 @@ export function SiteChrome() {
 
   useLayoutEffect(() => {
     syncProgress();
-    if (!onboardingRunning.current) {
-      scrollActiveStepIntoView("smooth");
+    if (wheelMode && !wheelDragging) {
+      const translate = getTranslateForIndex(activeIndex);
+      applyWheelTranslate(translate, true);
+      centeredIndexRef.current = activeIndex;
     }
-  }, [activeIndex, scrollActiveStepIntoView, syncProgress]);
+  }, [
+    activeIndex,
+    applyWheelTranslate,
+    getTranslateForIndex,
+    syncProgress,
+    wheelDragging,
+    wheelMode,
+  ]);
+
+  useEffect(() => {
+    const nav = scrollRef.current;
+    if (!nav || !wheelMode) return;
+
+    const resetWheelTouch = () => {
+      wheelTouch.current = null;
+      wheelIntent.current = "none";
+      setWheelDragging(false);
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      wheelTouch.current = {
+        startX: touch.clientX,
+        startTranslate: wheelTranslateRef.current,
+      };
+      wheelIntent.current = "none";
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!wheelTouch.current) return;
+
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      const dx = touch.clientX - wheelTouch.current.startX;
+
+      if (wheelIntent.current === "none") {
+        if (Math.abs(dx) < WHEEL_INTENT_THRESHOLD) return;
+        wheelIntent.current = "horizontal";
+        setWheelDragging(true);
+      }
+
+      if (wheelIntent.current !== "horizontal") return;
+
+      event.preventDefault();
+
+      const { min, max } = getTranslateBounds();
+      const nextTranslate = clampWheelTranslate(
+        wheelTouch.current.startTranslate + dx,
+        min,
+        max,
+      );
+
+      applyWheelTranslate(nextTranslate, false);
+      syncCenteredSection();
+      syncProgress();
+    };
+
+    const onTouchEnd = () => {
+      if (!wheelTouch.current) {
+        resetWheelTouch();
+        return;
+      }
+
+      const intent = wheelIntent.current;
+      resetWheelTouch();
+
+      if (intent !== "horizontal") return;
+
+      const centered = findCenteredStepIndex(nav, stepRefs.current);
+      centeredIndexRef.current = centered;
+      applyWheelTranslate(getTranslateForIndex(centered), true);
+
+      if (centered !== activeIndexRef.current) {
+        goToIndex(centered);
+      }
+
+      syncProgress();
+    };
+
+    const onTouchCancel = () => {
+      const index = centeredIndexRef.current;
+      resetWheelTouch();
+      applyWheelTranslate(getTranslateForIndex(index), true);
+      syncProgress();
+    };
+
+    nav.addEventListener("touchstart", onTouchStart, { passive: true });
+    nav.addEventListener("touchmove", onTouchMove, { passive: false });
+    nav.addEventListener("touchend", onTouchEnd, { passive: true });
+    nav.addEventListener("touchcancel", onTouchCancel, { passive: true });
+
+    return () => {
+      nav.removeEventListener("touchstart", onTouchStart);
+      nav.removeEventListener("touchmove", onTouchMove);
+      nav.removeEventListener("touchend", onTouchEnd);
+      nav.removeEventListener("touchcancel", onTouchCancel);
+    };
+  }, [
+    applyWheelTranslate,
+    getTranslateBounds,
+    getTranslateForIndex,
+    goToIndex,
+    syncCenteredSection,
+    syncProgress,
+    wheelMode,
+  ]);
 
   useEffect(() => {
     const onTimelineHint = async () => {
-      const scroll = scrollRef.current;
-      if (!scroll || hasSeenSwipeOnboarding()) return;
+      const track = trackRef.current;
+      if (!track || !wheelMode || hasSeenSwipeOnboarding()) return;
       if (prefersReducedMotion()) {
         markSwipeOnboardingSeen();
         return;
       }
 
       onboardingRunning.current = true;
-      await animateTimelinePeek(scroll);
-      scrollActiveStepIntoView("smooth");
+      const base = wheelTranslateRef.current;
+      await animateTimelinePeek(track, (dragPx) => base + dragPx);
+      applyWheelTranslate(getTranslateForIndex(activeIndexRef.current), true);
       markSwipeOnboardingSeen();
       onboardingRunning.current = false;
     };
 
     window.addEventListener(TIMELINE_SWIPE_HINT_EVENT, onTimelineHint);
     return () => window.removeEventListener(TIMELINE_SWIPE_HINT_EVENT, onTimelineHint);
-  }, [scrollActiveStepIntoView]);
+  }, [applyWheelTranslate, getTranslateForIndex, wheelMode]);
 
   const isLabPage =
     pathname === "/ui" ||
@@ -145,7 +341,14 @@ export function SiteChrome() {
           className="timeline-h-scroll"
         >
           <div ref={trackRef} className="timeline-h-track">
-            <div aria-hidden className="timeline-h-rail" />
+            <div
+              aria-hidden
+              className="timeline-h-rail"
+              style={{
+                left: `${rail.left}px`,
+                width: `${rail.width}px`,
+              }}
+            />
             <div
               aria-hidden
               className="timeline-h-progress"

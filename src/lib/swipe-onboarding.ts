@@ -57,17 +57,22 @@ export async function animateTrackPeek(
   track.style.transition = "";
 }
 
-export async function animateTimelinePeek(scroll: HTMLElement) {
-  const start = scroll.scrollLeft;
-  const peek = Math.min(56, Math.round(scroll.clientWidth * 0.18));
+export async function animateTimelinePeek(
+  track: HTMLElement,
+  getTranslate: (dragPx: number) => number,
+) {
+  const peek = 48;
 
-  scroll.classList.add("timeline-h-scroll--onboarding");
+  track.classList.add("timeline-h-track--onboarding");
 
-  scroll.scrollTo({ left: start + peek, behavior: "smooth" });
+  track.style.transition = `transform 0.5s ${EASING}`;
+  track.style.transform = `translateX(${getTranslate(peek)}px)`;
   await wait(500);
 
-  scroll.scrollTo({ left: start, behavior: "smooth" });
-  await wait(540);
+  track.style.transition = `transform 0.55s ${EASING}`;
+  track.style.transform = `translateX(${getTranslate(0)}px)`;
+  await wait(560);
 
-  scroll.classList.remove("timeline-h-scroll--onboarding");
+  track.classList.remove("timeline-h-track--onboarding");
+  track.style.transition = "";
 }

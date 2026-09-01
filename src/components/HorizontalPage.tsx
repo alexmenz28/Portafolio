@@ -11,6 +11,7 @@ import { usePageNavigation } from "@/contexts/PageNavigationContext";
 import { PAGE_SECTIONS } from "@/data/sections";
 import {
   animateTrackPeek,
+  animateTimelinePeek,
   hasSeenSwipeOnboarding,
   isMobileViewport,
   markSwipeOnboardingSeen,
@@ -18,6 +19,7 @@ import {
   TIMELINE_SWIPE_HINT_EVENT,
   wait,
 } from "@/lib/swipe-onboarding";
+import { clampPageDrag } from "@/lib/page-navigation";
 
 type Props = {
   children: ReactNode;
@@ -25,16 +27,6 @@ type Props = {
 
 const SWIPE_COMMIT_RATIO = 0.22;
 const INTENT_THRESHOLD = 10;
-
-function clampDrag(
-  index: number,
-  maxIndex: number,
-  dx: number,
-) {
-  if (index === 0 && dx > 0) return dx * 0.32;
-  if (index === maxIndex && dx < 0) return dx * 0.32;
-  return dx;
-}
 
 export function HorizontalPage({ children }: Props) {
   const { activeIndex, direction, goToIndex } = usePageNavigation();
@@ -230,7 +222,7 @@ export function HorizontalPage({ children }: Props) {
 
       event.preventDefault();
 
-      const dragPx = clampDrag(
+      const dragPx = clampPageDrag(
         dragBaseIndex.current,
         panelCount - 1,
         dx,

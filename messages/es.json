@@ -1,7 +1,7 @@
 {
   "Meta": {
-    "title": "Alexander Mendoza Cholima — Desarrollador Full-Stack",
-    "description": "Ingeniero en sistemas: productos en .NET y web moderna. Creador de Personal Memories. Abierto a roles remotos."
+    "title": "Alexander Mendoza Cholima — Desarrollador Full-Stack TypeScript",
+    "description": "Ingeniero full-stack en TypeScript que entrega productos web en producción—Next.js, Node, PostgreSQL. Creador de Personal Memories. Abierto a roles remotos."
   },
   "Nav": {
     "hero": "Inicio",
@@ -17,12 +17,12 @@
     "themeLight": "Cambiar a tema claro",
     "themeDark": "Cambiar a tema oscuro",
     "language": "Idioma",
-    "swipeHint": "Desliza hacia los lados para explorar las secciones"
+    "swipeHint": "Desliza la página o la barra de abajo — arrastra más lejos para saltar secciones"
   },
   "Hero": {
-    "role": "Desarrollador Full-Stack · .NET y Web",
+    "role": "Full-Stack TypeScript · Productos web",
     "location": "Santa Cruz, Bolivia · Abierto a remoto",
-    "tagline": "Entrego sistemas en producción con .NET y stacks web modernos—desde software operativo universitario hasta productos en vivo como Personal Memories.",
+    "tagline": "Entrego productos web de punta a punta—TypeScript, Next.js, Node y PostgreSQL—con experiencia enterprise en .NET de sistemas universitarios. Muestra en vivo: Personal Memories.",
     "ctaProjects": "Ver proyectos",
     "ctaContact": "Contactar",
     "photoAlt": "Retrato de Alexander Mendoza Cholima"
@@ -37,7 +37,7 @@
       "memories": {
         "title": "Personal Memories",
         "description": "App web en producción para registrar fechas importantes, personas y el contexto que necesitas cuando llega el momento—lugares, ideas de regalo y notas personales.",
-        "stack": "Next.js · TypeScript · Auth · Vercel"
+        "stack": "Next.js · TypeScript · PostgreSQL · Prisma · Better Auth · Vercel"
       },
       "joyeria": {
         "title": "Joyería MARR",
@@ -85,27 +85,27 @@
     "title": "Habilidades",
     "subtitle": "Herramientas con las que entrego, agrupadas como trabajo de verdad.",
     "groups": {
+      "web": {
+        "label": "Web y producto",
+        "items": "TypeScript · React · Next.js · Node.js · Fastify · Tailwind · PostgreSQL · Prisma"
+      },
       "languages": {
         "label": "Lenguajes",
-        "items": "C# · TypeScript / JavaScript · SQL · Python · Node.js"
-      },
-      "dotnet": {
-        "label": ".NET",
-        "items": ".NET · Blazor Server · DevExpress XAF / UI · Entity Framework · SQL Server"
-      },
-      "web": {
-        "label": "Web",
-        "items": "React · Next.js · Tailwind CSS · ASP.NET Core · PostgreSQL · Prisma"
+        "items": "TypeScript / JavaScript · C# · SQL · Python"
       },
       "tools": {
         "label": "Servicios y calidad",
-        "items": "Git · Docker · Sentry · Better Auth · Inngest · Resend · Linux"
+        "items": "Git · Docker · Sentry · Better Auth · Inngest · Resend · Linux · Notion"
+      },
+      "dotnet": {
+        "label": "También · .NET",
+        "items": "ASP.NET Core · Blazor Server · EF Core · SQL Server · DevExpress XAF / UI"
       }
     }
   },
   "About": {
     "title": "Sobre mí",
-    "body": "Soy graduado de Ingeniería en Sistemas en UTEPSA (2021–2026) en Santa Cruz, Bolivia. Me gustan los sistemas claros: esquemas que sostienen, interfaces calmadas y código que otros puedan mantener. Además de la carrera, apoyé laboratorios de sistemas/redes, competí en ICPC, entregué software universitario en .NET y lancé Personal Memories como producto en vivo. Busco roles remotos donde se encuentren profundidad en .NET y oficio web moderno.",
+    "body": "Soy graduado de Ingeniería en Sistemas en UTEPSA (2021–2026) en Santa Cruz, Bolivia. Me gustan los sistemas claros: esquemas que sostienen, interfaces calmadas y código que otros puedan mantener. Lancé Personal Memories como producto TypeScript en vivo, entregué software universitario en .NET, apoyé laboratorios de sistemas/redes y competí en ICPC. Busco roles remotos donde el oficio web moderno se encuentre con entregas confiables.",
     "availability": "Abierto a remoto · Inglés (intermedio) · Español (nativo)"
   },
   "Contact": {
