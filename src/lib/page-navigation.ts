@@ -55,3 +55,15 @@ export function clampWheelTranslate(
   }
   return translate;
 }
+
+/** Map touch X on the nav bar to a section index (0 … maxIndex). */
+export function resolveWheelIndexFromPointer(
+  pointerX: number,
+  navLeft: number,
+  navWidth: number,
+  maxIndex: number,
+) {
+  if (navWidth <= 0 || maxIndex <= 0) return 0;
+  const ratio = Math.min(1, Math.max(0, (pointerX - navLeft) / navWidth));
+  return Math.round(ratio * maxIndex);
+}
