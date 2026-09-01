@@ -42,6 +42,9 @@ export function findCenteredStepIndex(
   return closest;
 }
 
+/** Nav wheel: finger travel multiplier (higher = less drag needed). */
+export const NAV_WHEEL_DRAG_GAIN = 1.85;
+
 export function clampWheelTranslate(
   translate: number,
   minTranslate: number,
@@ -54,16 +57,4 @@ export function clampWheelTranslate(
     return minTranslate + (translate - minTranslate) * 0.28;
   }
   return translate;
-}
-
-/** Map touch X on the nav bar to a section index (0 … maxIndex). */
-export function resolveWheelIndexFromPointer(
-  pointerX: number,
-  navLeft: number,
-  navWidth: number,
-  maxIndex: number,
-) {
-  if (navWidth <= 0 || maxIndex <= 0) return 0;
-  const ratio = Math.min(1, Math.max(0, (pointerX - navLeft) / navWidth));
-  return Math.round(ratio * maxIndex);
 }

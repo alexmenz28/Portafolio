@@ -8,8 +8,9 @@ import { usePageNavigation } from "@/contexts/PageNavigationContext";
 import { PAGE_SECTIONS } from "@/data/sections";
 import { ScrambleText } from "@/components/ScrambleText";
 import {
+  clampWheelTranslate,
   findCenteredStepIndex,
-  resolveWheelIndexFromPointer,
+  NAV_WHEEL_DRAG_GAIN,
   translateToCenterStep,
 } from "@/lib/page-navigation";
 import {
@@ -20,7 +21,7 @@ import {
   TIMELINE_SWIPE_HINT_EVENT,
 } from "@/lib/swipe-onboarding";
 
-const WHEEL_INTENT_THRESHOLD = 6;
+const WHEEL_INTENT_THRESHOLD = 8;
 
 export function SiteChrome() {
   const t = useTranslations("Nav");
@@ -44,6 +45,28 @@ export function SiteChrome() {
   const [progress, setProgress] = useState({ left: 0, width: 0 });
 
   activeIndexRef.current = activeIndex;
+
+  const getTranslateBounds = useCallback(() => {
+    const scroll = scrollRef.current;
+    const first = stepRefs.current[0];
+    const last = stepRefs.current[PAGE_SECTIONS.length - 1];
+    if (!scroll || !first || !last) {
+      return { min: 0, max: 0 };
+    }
+
+    const max = translateToCenterStep(
+      scroll.clientWidth,
+      first.offsetLeft,
+      first.offsetWidth,
+    );
+    const min = translateToCenterStep(
+      scroll.clientWidth,
+      last.offsetLeft,
+      last.offsetWidth,
+    );
+
+    return { min, max };
+  }, []);
 
   const getTranslateForIndex = useCallback((index: number) => {
     const scroll = scrollRef.current;
@@ -69,6 +92,18 @@ export function SiteChrome() {
     },
     [wheelMode],
   );
+
+  const syncCenteredSection = useCallback(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+
+    const centered = findCenteredStepIndex(scroll, stepRefs.current);
+    centeredIndexRef.current = centered;
+
+    if (centered !== activeIndexRef.current) {
+      goToIndex(centered);
+    }
+  }, [goToIndex]);
 
   const syncProgress = useCallback(() => {
     const track = trackRef.current;
@@ -202,22 +237,15 @@ export function SiteChrome() {
 
       event.preventDefault();
 
-      const navRect = nav.getBoundingClientRect();
-      const maxIndex = PAGE_SECTIONS.length - 1;
-      const targetIndex = resolveWheelIndexFromPointer(
-        touch.clientX,
-        navRect.left,
-        navRect.width,
-        maxIndex,
+      const { min, max } = getTranslateBounds();
+      const nextTranslate = clampWheelTranslate(
+        wheelTouch.current.startTranslate + dx * NAV_WHEEL_DRAG_GAIN,
+        min,
+        max,
       );
 
-      applyWheelTranslate(getTranslateForIndex(targetIndex), false);
-
-      if (targetIndex !== activeIndexRef.current) {
-        goToIndex(targetIndex);
-      }
-
-      centeredIndexRef.current = targetIndex;
+      applyWheelTranslate(nextTranslate, false);
+      syncCenteredSection();
       syncProgress();
     };
 
@@ -263,8 +291,10 @@ export function SiteChrome() {
     };
   }, [
     applyWheelTranslate,
+    getTranslateBounds,
     getTranslateForIndex,
     goToIndex,
+    syncCenteredSection,
     syncProgress,
     wheelMode,
   ]);
