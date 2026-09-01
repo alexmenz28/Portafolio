@@ -8,10 +8,15 @@ import { usePageNavigation } from "@/contexts/PageNavigationContext";
 import { PAGE_SECTIONS } from "@/data/sections";
 import { ScrambleText } from "@/components/ScrambleText";
 import {
+  applyWheelFriction,
   clampWheelTranslate,
+  computeTouchVelocity,
   findCenteredStepIndex,
   NAV_WHEEL_DRAG_GAIN,
+  NAV_WHEEL_FLING_BOOST,
+  NAV_WHEEL_VELOCITY_STOP,
   translateToCenterStep,
+  type TouchSample,
 } from "@/lib/page-navigation";
 import {
   animateTimelinePeek,
@@ -38,6 +43,9 @@ export function SiteChrome() {
     null,
   );
   const wheelIntent = useRef<"none" | "horizontal">("none");
+  const wheelInertiaRef = useRef(false);
+  const momentumFrameRef = useRef<number | null>(null);
+  const touchSamplesRef = useRef<TouchSample[]>([]);
   const [wheelMode, setWheelMode] = useState(false);
   const [wheelDragging, setWheelDragging] = useState(false);
   const { activeIndex, goTo, goToIndex } = usePageNavigation();
@@ -184,7 +192,7 @@ export function SiteChrome() {
 
   useLayoutEffect(() => {
     syncProgress();
-    if (wheelMode && !wheelDragging) {
+    if (wheelMode && !wheelDragging && !wheelInertiaRef.current) {
       const translate = getTranslateForIndex(activeIndex);
       applyWheelTranslate(translate, true);
       centeredIndexRef.current = activeIndex;
@@ -202,13 +210,91 @@ export function SiteChrome() {
     const nav = scrollRef.current;
     if (!nav || !wheelMode) return;
 
+    const pushTouchSample = (x: number) => {
+      const t = performance.now();
+      touchSamplesRef.current.push({ x, t });
+      const cutoff = t - 100;
+      touchSamplesRef.current = touchSamplesRef.current.filter(
+        (sample) => sample.t >= cutoff,
+      );
+    };
+
+    const stopMomentum = () => {
+      if (momentumFrameRef.current !== null) {
+        cancelAnimationFrame(momentumFrameRef.current);
+        momentumFrameRef.current = null;
+      }
+      wheelInertiaRef.current = false;
+    };
+
+    const snapToCentered = (animated: boolean) => {
+      const centered = findCenteredStepIndex(nav, stepRefs.current);
+      centeredIndexRef.current = centered;
+      applyWheelTranslate(getTranslateForIndex(centered), animated);
+
+      if (centered !== activeIndexRef.current) {
+        goToIndex(centered);
+      }
+
+      syncProgress();
+    };
+
+    const startMomentum = (velocityTranslate: number) => {
+      if (
+        prefersReducedMotion() ||
+        Math.abs(velocityTranslate) < NAV_WHEEL_VELOCITY_STOP
+      ) {
+        snapToCentered(true);
+        return;
+      }
+
+      wheelInertiaRef.current = true;
+      let velocity = velocityTranslate;
+      let lastT = performance.now();
+
+      const tick = (now: number) => {
+        const dt = Math.min(32, now - lastT);
+        lastT = now;
+
+        velocity = applyWheelFriction(velocity, dt);
+
+        const { min, max } = getTranslateBounds();
+        let next = wheelTranslateRef.current + velocity * dt;
+
+        if (next > max) {
+          next = max;
+          velocity = 0;
+        } else if (next < min) {
+          next = min;
+          velocity = 0;
+        }
+
+        applyWheelTranslate(next, false);
+        syncCenteredSection();
+        syncProgress();
+
+        if (Math.abs(velocity) < NAV_WHEEL_VELOCITY_STOP) {
+          stopMomentum();
+          snapToCentered(true);
+          return;
+        }
+
+        momentumFrameRef.current = requestAnimationFrame(tick);
+      };
+
+      momentumFrameRef.current = requestAnimationFrame(tick);
+    };
+
     const resetWheelTouch = () => {
       wheelTouch.current = null;
       wheelIntent.current = "none";
+      touchSamplesRef.current = [];
       setWheelDragging(false);
     };
 
     const onTouchStart = (event: TouchEvent) => {
+      stopMomentum();
+
       const touch = event.touches[0];
       if (!touch) return;
 
@@ -217,6 +303,7 @@ export function SiteChrome() {
         startTranslate: wheelTranslateRef.current,
       };
       wheelIntent.current = "none";
+      pushTouchSample(touch.clientX);
     };
 
     const onTouchMove = (event: TouchEvent) => {
@@ -224,6 +311,8 @@ export function SiteChrome() {
 
       const touch = event.touches[0];
       if (!touch) return;
+
+      pushTouchSample(touch.clientX);
 
       const dx = touch.clientX - wheelTouch.current.startX;
 
@@ -256,26 +345,20 @@ export function SiteChrome() {
       }
 
       const intent = wheelIntent.current;
+      const fingerVelocity = computeTouchVelocity(touchSamplesRef.current);
       resetWheelTouch();
 
       if (intent !== "horizontal") return;
 
-      const centered = findCenteredStepIndex(nav, stepRefs.current);
-      centeredIndexRef.current = centered;
-      applyWheelTranslate(getTranslateForIndex(centered), true);
-
-      if (centered !== activeIndexRef.current) {
-        goToIndex(centered);
-      }
-
-      syncProgress();
+      const velocityTranslate =
+        fingerVelocity * NAV_WHEEL_DRAG_GAIN * NAV_WHEEL_FLING_BOOST;
+      startMomentum(velocityTranslate);
     };
 
     const onTouchCancel = () => {
-      const index = centeredIndexRef.current;
+      stopMomentum();
       resetWheelTouch();
-      applyWheelTranslate(getTranslateForIndex(index), true);
-      syncProgress();
+      snapToCentered(true);
     };
 
     nav.addEventListener("touchstart", onTouchStart, { passive: true });
@@ -284,6 +367,7 @@ export function SiteChrome() {
     nav.addEventListener("touchcancel", onTouchCancel, { passive: true });
 
     return () => {
+      stopMomentum();
       nav.removeEventListener("touchstart", onTouchStart);
       nav.removeEventListener("touchmove", onTouchMove);
       nav.removeEventListener("touchend", onTouchEnd);
