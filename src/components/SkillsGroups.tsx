@@ -13,7 +13,7 @@ export function SkillsGroups() {
       {GROUP_KEYS.map((key) => (
         <div
           key={key}
-          className="border-l-2 border-secondary/50 py-0.5 pl-4 md:pl-3.5"
+          className="border-l-2 border-secondary/40 py-0.5 pl-4 md:pl-3.5"
         >
           <ScrambleText
             text={t(`groups.${key}.label`)}

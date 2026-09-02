@@ -10,46 +10,46 @@ export function HeroContent() {
   const { goTo } = usePageNavigation();
 
   return (
-    <div>
+    <div className="flex flex-col">
       <ScrambleText
         text={t("role")}
-        className="text-sm font-medium tracking-[0.14em] text-secondary uppercase"
+        className="text-[0.68rem] font-medium tracking-[0.18em] text-secondary uppercase sm:text-[0.7rem] sm:tracking-[0.2em] md:text-xs"
         as="p"
       />
       <ScrambleText
         text="Alexander Mendoza Cholima"
-        className="mt-4 font-display text-4xl leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl"
+        className="mt-3 text-balance font-display text-[2.15rem] leading-[1.1] tracking-[-0.02em] text-foreground sm:mt-4 sm:text-4xl md:text-5xl lg:text-[3.35rem]"
         as="h1"
         duration={520}
       />
       <ScrambleText
         text={t("location")}
-        className="mt-3 text-sm text-secondary"
+        className="mt-2.5 text-sm text-secondary/90 sm:mt-3"
         as="p"
       />
       <ScrambleText
         text={t("tagline")}
-        className="mt-6 max-w-xl text-base text-foreground/85 md:text-lg"
+        className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-foreground/78 sm:mt-6 sm:text-base md:text-lg"
         as="p"
         duration={560}
       />
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div className="mt-7 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-3">
         <button
           type="button"
           onClick={() => goTo("projects")}
-          className="inline-flex items-center justify-center rounded-md bg-secondary px-5 py-2.5 text-sm font-semibold text-background transition duration-300 hover:bg-primary"
+          className="inline-flex items-center justify-center rounded-md bg-secondary px-5 py-2.5 text-sm font-semibold tracking-wide text-background transition duration-300 hover:bg-primary"
         >
           <ScrambleText text={t("ctaProjects")} />
         </button>
         <button
           type="button"
           onClick={() => goTo("contact")}
-          className="inline-flex items-center justify-center rounded-md border border-secondary px-5 py-2.5 text-sm font-semibold text-secondary transition duration-300 hover:bg-secondary hover:text-background"
+          className="inline-flex items-center justify-center rounded-md border border-secondary/70 px-5 py-2.5 text-sm font-semibold tracking-wide text-secondary transition duration-300 hover:border-secondary hover:bg-secondary hover:text-background"
         >
           <ScrambleText text={t("ctaContact")} />
         </button>
       </div>
-      <div className="mt-8 flex gap-4 text-secondary">
+      <div className="mt-7 flex gap-5 text-secondary/85 sm:mt-8">
         <a
           href={social.email}
           className="transition hover:text-primary"

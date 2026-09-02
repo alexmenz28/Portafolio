@@ -18,7 +18,7 @@ export function Contact() {
           <div className="flex flex-wrap gap-3">
             <a
               href={social.email}
-              className="inline-flex items-center rounded-md bg-secondary px-5 py-2.5 text-sm font-semibold text-background transition duration-300 hover:bg-primary"
+              className="inline-flex items-center rounded-md bg-secondary px-5 py-2.5 text-sm font-semibold tracking-wide text-background transition duration-300 hover:bg-primary"
             >
               <ScrambleText text={t("email")} duration={360} />
             </a>
@@ -26,7 +26,7 @@ export function Contact() {
               href={social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-secondary px-5 py-2.5 text-sm font-semibold text-secondary transition duration-300 hover:bg-secondary hover:text-background"
+              className="inline-flex items-center rounded-md border border-secondary/70 px-5 py-2.5 text-sm font-semibold tracking-wide text-secondary transition duration-300 hover:border-secondary hover:bg-secondary hover:text-background"
             >
               <ScrambleText text={t("github")} duration={360} />
             </a>
@@ -34,7 +34,7 @@ export function Contact() {
               href={social.site}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-secondary px-5 py-2.5 text-sm font-semibold text-secondary transition duration-300 hover:bg-secondary hover:text-background"
+              className="inline-flex items-center rounded-md border border-secondary/70 px-5 py-2.5 text-sm font-semibold tracking-wide text-secondary transition duration-300 hover:border-secondary hover:bg-secondary hover:text-background"
             >
               <ScrambleText text={t("product")} duration={360} />
             </a>

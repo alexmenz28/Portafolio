@@ -418,7 +418,7 @@ export function SiteChrome() {
 
       <header
         ref={headerRef}
-        className="site-chrome theme-surface fixed right-0 left-0 z-40 border-secondary/25 md:top-0 md:bottom-auto md:border-b bottom-0 border-t"
+        className="site-chrome theme-surface fixed right-0 left-0 z-40 border-secondary/18 md:top-0 md:bottom-auto md:border-b bottom-0 border-t"
       >
         <nav
           ref={scrollRef}
