@@ -702,6 +702,16 @@ html:active-view-transition body {
 .orbit-nav--compact .orbit-node,
 .orbit-nav--compact .orbit-node--hub {
   cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Let taps in empty bloom pass through to the backdrop to close */
+.orbit-nav--compact .orbit-bloom-hit {
+  pointer-events: none;
+}
+
+.orbit-nav--compact .orbit-hit {
+  touch-action: manipulation;
 }
 
 .orbit-nav--dragging .orbit-node {

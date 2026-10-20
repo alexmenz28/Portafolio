@@ -29,6 +29,8 @@ const LABEL_FADE_MS = 70;
 const CONTRACT_MS = 680;
 const LEAVE_CLOSE_MS = 90;
 const DRAG_CLICK_SLOP = 8;
+/** Looser tap slop on touch — fingers always jitter a few px. */
+const TAP_CLICK_SLOP = 28;
 const REPEL_MIN = 72;
 const HUB_ID: PageSectionId = "hero";
 const DOCK_KEY = "portfolio-orbit-dock";
@@ -708,7 +710,11 @@ export function SideNodeNav() {
     id: PageSectionId,
   ) => {
     if (phase === "idle") {
+      // Open only — the same touch's pointerup must not count as a select
+      // (phase may already be "expanded" by then on mobile).
       openGraph();
+      pointerStart.current = null;
+      dragDistance.current = 0;
       return;
     }
     if (phase !== "expanded") return;
@@ -737,13 +743,14 @@ export function SideNodeNav() {
   };
 
   const onPointerMoveNode = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    if (!dragId || !pointerStart.current) return;
+    if (!pointerStart.current) return;
     const dx = event.clientX - pointerStart.current.x;
     const dy = event.clientY - pointerStart.current.y;
     dragDistance.current = Math.hypot(dx, dy);
 
     // Compact: track slop only (ignore drag offsets / dock hints).
     if (compactRef.current) return;
+    if (!dragId) return;
 
     const next = { x: dx, y: dy };
     dragOffsetRef.current = next;
@@ -760,16 +767,21 @@ export function SideNodeNav() {
     if (phase === "idle") return;
     if (phase !== "expanded") return;
 
+    // No expanded-phase pointerdown on this gesture (e.g. the tap that
+    // just opened the graph) — ignore, or we instantly select+close.
+    const hadGesture = pointerStart.current !== null;
+
     try {
       event.currentTarget.releasePointerCapture(event.pointerId);
     } catch {
       /* already released */
     }
 
-    const moved = dragDistance.current > DRAG_CLICK_SLOP;
+    const tapOnly = compactRef.current;
+    const slop = tapOnly ? TAP_CLICK_SLOP : DRAG_CLICK_SLOP;
+    const moved = dragDistance.current > slop;
     const offset = { ...dragOffsetRef.current };
     const hint = id === HUB_ID ? dockFromOffset(offset, dock) : null;
-    const tapOnly = compactRef.current;
     pointerStart.current = null;
     dragDistance.current = 0;
     dragIdRef.current = null;
@@ -777,6 +789,8 @@ export function SideNodeNav() {
     setDragOffset({ x: 0, y: 0 });
     dragOffsetRef.current = { x: 0, y: 0 };
     setDockHint(null);
+
+    if (!hadGesture) return;
 
     if (tapOnly) {
       orbitModeRef.current = "rest";
@@ -947,7 +961,7 @@ export function SideNodeNav() {
                 } as CSSProperties
               }
               onPointerDown={(event) => onPointerDownNode(event, HUB_ID)}
-              onPointerMove={compact ? undefined : onPointerMoveNode}
+              onPointerMove={onPointerMoveNode}
               onPointerUp={(event) => onPointerUpNode(event, HUB_ID)}
               onPointerCancel={(event) => onPointerUpNode(event, HUB_ID)}
               onMouseEnter={
@@ -980,9 +994,7 @@ export function SideNodeNav() {
                       onPointerDown={(event) =>
                         onPointerDownNode(event, section.id)
                       }
-                      onPointerMove={
-                        compact ? undefined : onPointerMoveNode
-                      }
+                      onPointerMove={onPointerMoveNode}
                       onPointerUp={(event) =>
                         onPointerUpNode(event, section.id)
                       }
