@@ -308,6 +308,7 @@ export function SideNodeNav() {
   );
   const orbitModeRef = useRef<OrbitMode>("rest");
   const dockTravelTimer = useRef<number | null>(null);
+  const compactRef = useRef(compact);
 
   const radius = compact ? 140 : 172;
   const hitPad = 96;
@@ -363,6 +364,10 @@ export function SideNodeNav() {
   useEffect(() => {
     dockRef.current = dock;
   }, [dock]);
+
+  useEffect(() => {
+    compactRef.current = compact;
+  }, [compact]);
 
   useEffect(() => {
     slotsRef.current = slots;
@@ -583,7 +588,8 @@ export function SideNodeNav() {
 
   const openGraph = useCallback(() => {
     clearCloseTimers();
-    pointerInside.current = true;
+    // Hover-intent only on desktop; mobile stays tap + backdrop.
+    if (!compactRef.current) pointerInside.current = true;
     if (phaseRef.current === "closing") {
       setLabelsHidden(false);
       setSpread(true);
@@ -712,11 +718,19 @@ export function SideNodeNav() {
     event.currentTarget.setPointerCapture(event.pointerId);
     pointerStart.current = { x: event.clientX, y: event.clientY };
     dragDistance.current = 0;
+    setDockHint(null);
+
+    // Mobile / compact: tap only — no hub drag or dock gestures.
+    if (compactRef.current) {
+      dragIdRef.current = id;
+      setDragId(id);
+      return;
+    }
+
     dragIdRef.current = id;
     setDragId(id);
     setDragOffset({ x: 0, y: 0 });
     dragOffsetRef.current = { x: 0, y: 0 };
-    setDockHint(null);
     if (id === HUB_ID) {
       orbitModeRef.current = "hubDrag";
     }
@@ -727,6 +741,10 @@ export function SideNodeNav() {
     const dx = event.clientX - pointerStart.current.x;
     const dy = event.clientY - pointerStart.current.y;
     dragDistance.current = Math.hypot(dx, dy);
+
+    // Compact: track slop only (ignore drag offsets / dock hints).
+    if (compactRef.current) return;
+
     const next = { x: dx, y: dy };
     dragOffsetRef.current = next;
     setDragOffset(next);
@@ -751,6 +769,7 @@ export function SideNodeNav() {
     const moved = dragDistance.current > DRAG_CLICK_SLOP;
     const offset = { ...dragOffsetRef.current };
     const hint = id === HUB_ID ? dockFromOffset(offset, dock) : null;
+    const tapOnly = compactRef.current;
     pointerStart.current = null;
     dragDistance.current = 0;
     dragIdRef.current = null;
@@ -758,6 +777,13 @@ export function SideNodeNav() {
     setDragOffset({ x: 0, y: 0 });
     dragOffsetRef.current = { x: 0, y: 0 };
     setDockHint(null);
+
+    if (tapOnly) {
+      orbitModeRef.current = "rest";
+      // Finger slipped: ignore. Clean tap: navigate / collapse via select.
+      if (!moved) selectAndContract(id);
+      return;
+    }
 
     if (!moved) {
       orbitModeRef.current = "rest";
@@ -791,6 +817,7 @@ export function SideNodeNav() {
   }, [allIds]);
 
   const onZoneEnter = () => {
+    if (compactRef.current) return;
     pointerInside.current = true;
     if (leaveTimer.current) {
       window.clearTimeout(leaveTimer.current);
@@ -800,6 +827,7 @@ export function SideNodeNav() {
   };
 
   const onZoneLeave = () => {
+    if (compactRef.current) return;
     pointerInside.current = false;
     if (dragIdRef.current) return;
     if (orbitModeRef.current === "dockTravel") return;
@@ -830,7 +858,7 @@ export function SideNodeNav() {
         />
       ) : null}
 
-      {dragId === HUB_ID ? (
+      {!compact && dragId === HUB_ID ? (
         <div className="orbit-dock-guides" aria-hidden>
           {(["left", "right", "top", "bottom"] as const).map((side) =>
             side === dock ? null : (
@@ -845,19 +873,23 @@ export function SideNodeNav() {
 
       <nav
         aria-label={t("timeline")}
-        className={`orbit-nav orbit-nav--dock-${dock} ${graphOpen ? "orbit-nav--expanded" : ""} ${phase === "closing" ? "orbit-nav--closing" : ""} ${dragging ? "orbit-nav--dragging" : ""}`}
+        className={`orbit-nav orbit-nav--dock-${dock} ${graphOpen ? "orbit-nav--expanded" : ""} ${phase === "closing" ? "orbit-nav--closing" : ""} ${dragging ? "orbit-nav--dragging" : ""} ${compact ? "orbit-nav--compact" : ""}`}
         style={pointStyle}
       >
         <div className="orbit-anchor" onTransitionEnd={onAnchorTransitionEnd}>
           <div
             className="orbit-origin"
-            onPointerEnter={graphOpen ? onZoneEnter : undefined}
-            onPointerLeave={graphOpen ? onZoneLeave : undefined}
+            onPointerEnter={
+              !compact && graphOpen ? onZoneEnter : undefined
+            }
+            onPointerLeave={
+              !compact && graphOpen ? onZoneLeave : undefined
+            }
           >
             {phase === "idle" ? (
               <div
                 className="orbit-hit"
-                onPointerEnter={onZoneEnter}
+                onPointerEnter={compact ? undefined : onZoneEnter}
                 onClick={openGraph}
                 aria-hidden
               />
@@ -906,7 +938,7 @@ export function SideNodeNav() {
               collapsed={phase === "idle"}
               active={phase === "idle" ? true : activeId === HUB_ID}
               hot={hoveredId === HUB_ID || dragId === HUB_ID}
-              dragging={dragId === HUB_ID}
+              dragging={!compact && dragId === HUB_ID}
               hideLabel={labelsHidden}
               style={
                 {
@@ -915,11 +947,15 @@ export function SideNodeNav() {
                 } as CSSProperties
               }
               onPointerDown={(event) => onPointerDownNode(event, HUB_ID)}
-              onPointerMove={onPointerMoveNode}
+              onPointerMove={compact ? undefined : onPointerMoveNode}
               onPointerUp={(event) => onPointerUpNode(event, HUB_ID)}
               onPointerCancel={(event) => onPointerUpNode(event, HUB_ID)}
-              onMouseEnter={() => setHoveredId(HUB_ID)}
-              onMouseLeave={() => setHoveredId(null)}
+              onMouseEnter={
+                compact ? undefined : () => setHoveredId(HUB_ID)
+              }
+              onMouseLeave={
+                compact ? undefined : () => setHoveredId(null)
+              }
             />
 
             {graphOpen
@@ -933,7 +969,7 @@ export function SideNodeNav() {
                       hot={
                         hoveredId === section.id || dragId === section.id
                       }
-                      dragging={dragId === section.id}
+                      dragging={!compact && dragId === section.id}
                       hideLabel={labelsHidden}
                       style={
                         {
@@ -944,15 +980,23 @@ export function SideNodeNav() {
                       onPointerDown={(event) =>
                         onPointerDownNode(event, section.id)
                       }
-                      onPointerMove={onPointerMoveNode}
+                      onPointerMove={
+                        compact ? undefined : onPointerMoveNode
+                      }
                       onPointerUp={(event) =>
                         onPointerUpNode(event, section.id)
                       }
                       onPointerCancel={(event) =>
                         onPointerUpNode(event, section.id)
                       }
-                      onMouseEnter={() => setHoveredId(section.id)}
-                      onMouseLeave={() => setHoveredId(null)}
+                      onMouseEnter={
+                        compact
+                          ? undefined
+                          : () => setHoveredId(section.id)
+                      }
+                      onMouseLeave={
+                        compact ? undefined : () => setHoveredId(null)
+                      }
                     />
                   );
                 })

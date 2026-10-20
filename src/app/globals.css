@@ -698,6 +698,12 @@ html:active-view-transition body {
   cursor: grabbing;
 }
 
+/* Touch / compact: tap targets, no grab affordance */
+.orbit-nav--compact .orbit-node,
+.orbit-nav--compact .orbit-node--hub {
+  cursor: pointer;
+}
+
 .orbit-nav--dragging .orbit-node {
   transition: none !important;
 }
