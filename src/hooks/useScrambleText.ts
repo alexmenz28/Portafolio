@@ -60,19 +60,42 @@ export function reserveScrambleWidth(from: string, to: string) {
   return from.length >= to.length ? from : to;
 }
 
-export function useScrambleText(text: string, duration = SCRAMBLE_DURATION) {
-  const [display, setDisplay] = useState(text);
+/**
+ * Glyph scramble. When `active` is false, display stays empty.
+ * Flipping `active` to true (or changing `text` while active) runs the reveal.
+ */
+export function useScrambleText(
+  text: string,
+  duration = SCRAMBLE_DURATION,
+  active = true,
+) {
+  const [display, setDisplay] = useState(() => (active ? text : ""));
   const [reserveText, setReserveText] = useState(text);
-  const displayRef = useRef(text);
-  const targetRef = useRef(text);
+  const displayRef = useRef(active ? text : "");
+  const targetRef = useRef(active ? text : "");
   const frameRef = useRef<number | null>(null);
+  const wasActiveRef = useRef(active);
 
   useEffect(() => {
-    if (text === targetRef.current) return;
+    if (!active) {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      displayRef.current = "";
+      targetRef.current = "";
+      wasActiveRef.current = false;
+      setDisplay("");
+      setReserveText(text);
+      return;
+    }
 
-    const from = displayRef.current;
+    const becameActive = !wasActiveRef.current;
+    wasActiveRef.current = true;
+
+    if (!becameActive && text === targetRef.current) return;
+
+    const from = becameActive ? "" : displayRef.current;
     targetRef.current = text;
-    setReserveText(reserveScrambleWidth(from, text));
+    setReserveText(reserveScrambleWidth(from || text, text));
     const start = performance.now();
 
     const tick = (now: number) => {
@@ -97,7 +120,7 @@ export function useScrambleText(text: string, duration = SCRAMBLE_DURATION) {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
     };
-  }, [text, duration]);
+  }, [text, duration, active]);
 
   return { display, reserveText };
 }

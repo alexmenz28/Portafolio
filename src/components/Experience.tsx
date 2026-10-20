@@ -17,7 +17,11 @@ export function Experience() {
         {EXPERIENCE_KEYS.map((key) => {
           const bullets = t.raw(`items.${key}.bullets`) as string[];
           return (
-            <article key={key} className="border-t border-secondary/25 pt-5 md:pt-4">
+            <article
+              key={key}
+              id={`experience-${key}`}
+              className="scroll-mt-6 border-t border-secondary/25 pt-5 md:pt-4"
+            >
               <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
                 <div>
                   <ScrambleText
@@ -42,7 +46,7 @@ export function Experience() {
                 {bullets.map((bullet, index) => (
                   <li key={`${key}-${index}`} className="flex gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary" />
-                    <ScrambleText text={bullet} duration={500} />
+                    <span>{bullet}</span>
                   </li>
                 ))}
               </ul>

@@ -1,7 +1,7 @@
 {
   "Meta": {
     "title": "Alexander Mendoza Cholima — Desarrollador Full-Stack TypeScript",
-    "description": "Ingeniero full-stack en TypeScript que entrega productos web en producción—Next.js, Node, PostgreSQL. Creador de Personal Memories. Abierto a roles remotos."
+    "description": "Ingeniero full-stack en TypeScript que entrega productos web en producción—Next.js, React, Node, PostgreSQL. Apps en vivo: Personal Memories y Kolki. Abierto a roles remotos."
   },
   "Nav": {
     "hero": "Inicio",
@@ -17,12 +17,40 @@
     "themeLight": "Cambiar a tema claro",
     "themeDark": "Cambiar a tema oscuro",
     "language": "Idioma",
-    "swipeHint": "Desliza la página o la barra de abajo — arrastra más lejos para saltar secciones"
+    "expand": "Mostrar secciones",
+    "collapse": "Ocultar secciones",
+    "children": {
+      "projects": {
+        "memories": "Personal Memories",
+        "kolki": "Kolki",
+        "fastfood": "FAST FOOD S.A."
+      },
+      "experience": {
+        "utepsa": "UTEPSA"
+      },
+      "skills": {
+        "web": "Web y producto",
+        "languages": "Lenguajes",
+        "tools": "Servicios y calidad",
+        "dotnet": ".NET"
+      },
+      "education": {
+        "school": "UTEPSA",
+        "icpc": "ICPC"
+      },
+      "about": {
+        "availability": "Disponibilidad"
+      },
+      "contact": {
+        "links": "Correo y GitHub",
+        "kolki": "Kolki"
+      }
+    }
   },
   "Hero": {
     "role": "Full-Stack TypeScript · Productos web",
     "location": "Santa Cruz, Bolivia · Abierto a remoto",
-    "tagline": "Entrego productos web de punta a punta—TypeScript, Next.js, Node y PostgreSQL—con experiencia enterprise en .NET de sistemas universitarios. Muestra en vivo: Personal Memories.",
+    "tagline": "Entrego productos web de punta a punta—TypeScript, Next.js, Node y PostgreSQL—con experiencia enterprise en .NET de sistemas universitarios. Apps en vivo: Personal Memories y Kolki.",
     "ctaProjects": "Ver proyectos",
     "ctaContact": "Contactar",
     "photoAlt": "Retrato de Alexander Mendoza Cholima"
@@ -31,22 +59,23 @@
     "title": "Trabajo destacado",
     "subtitle": "Productos en vivo y repos públicos que un reclutador puede abrir en un clic.",
     "live": "Sitio en vivo",
+    "liveBadge": "En vivo",
     "repo": "GitHub",
     "allRepos": "Ver todos los repositorios públicos en GitHub →",
     "items": {
       "memories": {
         "title": "Personal Memories",
-        "description": "App web en producción para registrar fechas importantes, personas y el contexto que necesitas cuando llega el momento—lugares, ideas de regalo y notas personales.",
+        "description": "Producto en vivo para fechas importantes y el contexto que necesitas cuando llegan—personas, lugares, ideas de regalo y notas. Auth, Postgres y flujos de correo de punta a punta en Vercel.",
         "stack": "Next.js · TypeScript · PostgreSQL · Prisma · Better Auth · Vercel"
       },
-      "joyeria": {
-        "title": "Joyería MARR",
-        "description": "Sistema de gestión y venta de joyería: API ASP.NET Core, EF Core, SQL Server, JWT, Cloudinary y SPA React + Tailwind—con tests de integración.",
-        "stack": "ASP.NET Core · React · SQL Server · Tailwind"
+      "kolki": {
+        "title": "Kolki",
+        "description": "PWA de gastos local-first: registra un gasto en segundos, los datos viven en el dispositivo y la nube es opcional. Multi-moneda y offline—monorepo TypeScript con E2E en Playwright.",
+        "stack": "React · Vite · Dexie · Supabase · Cloudflare · Playwright · TypeScript"
       },
       "fastfood": {
         "title": "FAST FOOD S.A.",
-        "description": "Monorepo de abastecimiento e inventario para un distribuidor fast food: catálogos, stock en almacén central y jornadas diarias a unidades móviles—API Fastify, SPA React + Vite, Prisma sobre PostgreSQL y paquetes de dominio compartidos.",
+        "description": "Monorepo de abastecimiento e inventario para un distribuidor: catálogos, stock en almacén central y jornadas a unidades móviles—paquetes de dominio compartidos entre API y SPA.",
         "stack": "Fastify · React · Prisma · PostgreSQL · TypeScript"
       }
     }
@@ -61,10 +90,10 @@
         "period": "Ene 2025 – Dic 2025",
         "location": "Santa Cruz, Bolivia",
         "bullets": [
-          "Mantuve y amplié el backoffice SAF (DevExpress XAF / .NET), resolviendo incidencias y entregando módulos para áreas operativas.",
-          "Diseñé e implementé módulos Blazor Server de punta a punta: interfaz, esquema SQL Server, procedimientos almacenados y triggers.",
-          "Construí pantallas operativas con DevExpress (formularios, grillas y reportes) alineadas a flujos internos.",
-          "Trabajé en equipo ágil con Scrum y XP—sprints, refinamiento de backlog y entregas iterativas alineadas a necesidades operativas."
+          "Dueño de features e incidencias en el backoffice SAF (DevExpress XAF / .NET) usado por áreas operativas de la universidad.",
+          "Entregué módulos Blazor Server de punta a punta: interfaz, esquema SQL Server, procedimientos almacenados y triggers.",
+          "Construí pantallas DevExpress (formularios, grillas y reportes) alineadas a flujos reales—no demos.",
+          "Entregas en sprints Scrum/XP con refinamiento de backlog y releases iterativos ligados a operaciones."
         ]
       }
     }
@@ -87,7 +116,7 @@
     "groups": {
       "web": {
         "label": "Web y producto",
-        "items": "TypeScript · React · Next.js · Node.js · Fastify · Tailwind · PostgreSQL · Prisma"
+        "items": "TypeScript · React · Next.js · Node.js · Fastify · Vite · Tailwind · PostgreSQL · Prisma · Dexie"
       },
       "languages": {
         "label": "Lenguajes",
@@ -95,7 +124,7 @@
       },
       "tools": {
         "label": "Servicios y calidad",
-        "items": "Git · Docker · Sentry · Better Auth · Inngest · Resend · Linux · Notion"
+        "items": "Git · Docker · Sentry · Playwright · Cloudflare · Supabase · Better Auth · Linux"
       },
       "dotnet": {
         "label": "También · .NET",
@@ -105,15 +134,16 @@
   },
   "About": {
     "title": "Sobre mí",
-    "body": "Soy graduado de Ingeniería en Sistemas en UTEPSA (2021–2026) en Santa Cruz, Bolivia. Me gustan los sistemas claros: esquemas que sostienen, interfaces calmadas y código que otros puedan mantener. Lancé Personal Memories como producto TypeScript en vivo, entregué software universitario en .NET, apoyé laboratorios de sistemas/redes y competí en ICPC. Busco roles remotos donde el oficio web moderno se encuentre con entregas confiables.",
+    "body": "Soy graduado de Ingeniería en Sistemas en UTEPSA (2021–2026) en Santa Cruz, Bolivia. Me gustan los sistemas claros: esquemas que sostienen, interfaces calmadas y código que otros puedan mantener. Lancé Personal Memories y Kolki como productos TypeScript en vivo, entregué software universitario en .NET, apoyé laboratorios de sistemas/redes y competí en ICPC. Busco roles remotos donde el oficio web moderno se encuentre con entregas confiables.",
     "availability": "Abierto a remoto · Inglés (intermedio) · Español (nativo)"
   },
   "Contact": {
     "title": "Contacto",
-    "subtitle": "Email o GitHub para oportunidades. Personal Memories está en vivo si quieres ver un producto.",
+    "subtitle": "Disponible para roles remotos en TypeScript. Email o GitHub—o abre un producto en vivo abajo.",
     "email": "Correo",
     "github": "GitHub",
-    "product": "Personal Memories"
+    "product": "Personal Memories",
+    "kolki": "Kolki"
   },
   "Footer": {
     "rights": "© {year} Alexander Mendoza Cholima"

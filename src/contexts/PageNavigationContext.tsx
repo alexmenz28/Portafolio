@@ -10,47 +10,49 @@ import {
 } from "react";
 import { PAGE_SECTIONS, type PageSectionId } from "@/data/sections";
 
-export type SlideDirection = 1 | -1;
-
 type PageNavigationValue = {
   activeIndex: number;
   activeId: PageSectionId;
-  direction: SlideDirection;
   goTo: (id: PageSectionId) => void;
-  goToIndex: (index: number) => void;
+  goToTarget: (targetId: string) => void;
+  setActiveIndex: (index: number) => void;
 };
 
 const PageNavigationContext = createContext<PageNavigationValue | null>(null);
 
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function scrollToId(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({
+    behavior: prefersReducedMotion() ? "auto" : "smooth",
+    block: "start",
+  });
+}
+
 export function PageNavigationProvider({ children }: { children: ReactNode }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState<SlideDirection>(1);
 
-  const goToIndex = useCallback((index: number) => {
-    setActiveIndex((prev) => {
-      if (index === prev) return prev;
-      setDirection(index > prev ? 1 : -1);
-      return index;
-    });
+  const goTo = useCallback((id: PageSectionId) => {
+    scrollToId(id);
   }, []);
 
-  const goTo = useCallback(
-    (id: PageSectionId) => {
-      const index = PAGE_SECTIONS.findIndex((s) => s.id === id);
-      if (index >= 0) goToIndex(index);
-    },
-    [goToIndex],
-  );
+  const goToTarget = useCallback((targetId: string) => {
+    scrollToId(targetId);
+  }, []);
 
   const value = useMemo(
     () => ({
       activeIndex,
       activeId: PAGE_SECTIONS[activeIndex].id,
-      direction,
       goTo,
-      goToIndex,
+      goToTarget,
+      setActiveIndex,
     }),
-    [activeIndex, direction, goTo, goToIndex],
+    [activeIndex, goTo, goToTarget],
   );
 
   return (

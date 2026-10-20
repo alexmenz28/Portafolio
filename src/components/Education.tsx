@@ -13,7 +13,10 @@ export function Education() {
     <PanelShell>
       <AnimatedSectionHeading title={t("title")} subtitle={t("subtitle")} />
       <PanelBody>
-        <article className="border-t border-secondary/25 pt-5 md:pt-4">
+        <article
+          id="education-school"
+          className="scroll-mt-6 border-t border-secondary/25 pt-5 md:pt-4"
+        >
           <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
             <div>
               <ScrambleText
@@ -36,7 +39,11 @@ export function Education() {
           </div>
           <ul className="mt-4 space-y-2 text-sm text-foreground/85 md:mt-3 md:text-[0.9rem]">
             {bullets.map((bullet, index) => (
-              <li key={index} className="flex gap-3">
+              <li
+                key={index}
+                id={index === 1 ? "education-icpc" : undefined}
+                className={`flex gap-3 ${index === 1 ? "scroll-mt-6" : ""}`}
+              >
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary" />
                 <ScrambleText text={bullet} duration={500} />
               </li>

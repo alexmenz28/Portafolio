@@ -1,5 +1,5 @@
 export type ProjectLinks = {
-  id: "memories" | "joyeria" | "fastfood";
+  id: "memories" | "kolki" | "fastfood";
   live?: string;
   repo?: string;
 };
@@ -11,8 +11,8 @@ export const featuredProjects: ProjectLinks[] = [
     live: "https://personal-memories.com",
   },
   {
-    id: "joyeria",
-    repo: "https://github.com/alexmenz28/Joyeria-MARR",
+    id: "kolki",
+    live: "https://kolkiapp.com",
   },
   {
     id: "fastfood",
@@ -24,4 +24,5 @@ export const social = {
   email: "mailto:alexander.mendoza.cholima2248@gmail.com",
   github: "https://github.com/alexmenz28",
   site: "https://personal-memories.com",
+  kolki: "https://kolkiapp.com",
 } as const;

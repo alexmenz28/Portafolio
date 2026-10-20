@@ -4,9 +4,9 @@ import { Contact } from "@/components/Contact";
 import { Education } from "@/components/Education";
 import { Experience } from "@/components/Experience";
 import { Hero } from "@/components/Hero";
-import { HorizontalPage } from "@/components/HorizontalPage";
 import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
+import { VerticalPage } from "@/components/VerticalPage";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -17,7 +17,7 @@ export default async function HomePage({ params }: Props) {
   setRequestLocale(locale);
 
   return (
-    <HorizontalPage>
+    <VerticalPage>
       <Hero />
       <Projects />
       <Experience />
@@ -25,6 +25,6 @@ export default async function HomePage({ params }: Props) {
       <Education />
       <About />
       <Contact />
-    </HorizontalPage>
+    </VerticalPage>
   );
 }
