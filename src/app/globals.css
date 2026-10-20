@@ -705,10 +705,34 @@ html:active-view-transition body {
   touch-action: manipulation;
 }
 
-/* Labels must receive hits — they sit outside the orb box and were
-   falling through to a sibling node stacked on top. */
-.orbit-nav--compact .orbit-label {
+/*
+ * Critical: the satellite button box is a ~44px square that stacks in DOM
+ * order (Contact last = on top). Taps on Educación's title were hitting
+ * Contact's empty box underneath. Only the visible label + orb receive hits.
+ */
+.orbit-nav--compact .orbit-node:not(.orbit-node--hub) {
+  pointer-events: none;
+}
+
+.orbit-nav--compact .orbit-node:not(.orbit-node--hub) .orbit-float {
+  pointer-events: none;
+}
+
+.orbit-nav--compact .orbit-node:not(.orbit-node--hub) .orbit-label,
+.orbit-nav--compact .orbit-node:not(.orbit-node--hub) .orbit-orb {
   pointer-events: auto;
+}
+
+/* Larger finger target around the orb without expanding the button box */
+.orbit-nav--compact .orbit-node:not(.orbit-node--hub) .orbit-orb::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
 }
 
 /* Let taps in empty bloom pass through to the backdrop to close */

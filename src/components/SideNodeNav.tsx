@@ -60,7 +60,10 @@ function useCompactLayout() {
   const [compact, setCompact] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
+    // Narrow screens OR real touch devices (phones in landscape, etc.).
+    const mq = window.matchMedia(
+      "(max-width: 767px), (hover: none) and (pointer: coarse)",
+    );
     const sync = () => setCompact(mq.matches);
     sync();
     mq.addEventListener("change", sync);
@@ -1070,9 +1073,6 @@ export function SideNodeNav() {
                         {
                           "--orbit-x": `${pos.x}px`,
                           "--orbit-y": `${pos.y}px`,
-                          // Outer nodes paint above so their labels aren't
-                          // buried under a sibling orb box on touch.
-                          zIndex: 2 + Math.round(Math.hypot(pos.x, pos.y) / 24),
                         } as CSSProperties
                       }
                       onPointerDown={(event) =>
