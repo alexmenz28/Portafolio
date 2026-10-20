@@ -228,7 +228,57 @@ function clampLeash(
   });
 }
 
+/**
+ * Touch hit-test by geometry: labels sit outside the orb box and stack under
+ * later siblings, so the DOM target is often the wrong node. Prefer the
+ * closest label/orb rect under the finger.
+ */
+function pickOrbitIdAt(
+  clientX: number,
+  clientY: number,
+  ids: PageSectionId[],
+): PageSectionId | null {
+  const pad = 10;
+  let best: PageSectionId | null = null;
+  let bestDist = Infinity;
+
+  for (const id of ids) {
+    const root = document.querySelector<HTMLElement>(
+      `[data-orbit-id="${id}"]`,
+    );
+    if (!root) continue;
+
+    const label = root.querySelector<HTMLElement>(".orbit-label");
+    const orb = root.querySelector<HTMLElement>(".orbit-orb");
+    const parts = [label, orb].filter(Boolean) as HTMLElement[];
+
+    for (const part of parts) {
+      const r = part.getBoundingClientRect();
+      if (
+        clientX < r.left - pad ||
+        clientX > r.right + pad ||
+        clientY < r.top - pad ||
+        clientY > r.bottom + pad
+      ) {
+        continue;
+      }
+      const cx = (r.left + r.right) / 2;
+      const cy = (r.top + r.bottom) / 2;
+      const dist = Math.hypot(clientX - cx, clientY - cy);
+      // Prefer labels slightly over orbs when both match.
+      const score = dist + (part.classList.contains("orbit-label") ? -4 : 0);
+      if (score < bestDist) {
+        bestDist = score;
+        best = id;
+      }
+    }
+  }
+
+  return best;
+}
+
 function OrbitNodeButton({
+  id,
   label,
   active,
   hub,
@@ -244,6 +294,7 @@ function OrbitNodeButton({
   onMouseEnter,
   onMouseLeave,
 }: {
+  id: PageSectionId;
   label: string;
   active?: boolean;
   hub?: boolean;
@@ -262,6 +313,7 @@ function OrbitNodeButton({
   return (
     <button
       type="button"
+      data-orbit-id={id}
       className={`orbit-node ${hub ? "orbit-node--hub" : ""} ${collapsed ? "orbit-node--collapsed" : ""} ${active ? "orbit-node--active" : ""} ${hot ? "orbit-node--hot" : ""} ${dragging ? "orbit-node--dragging" : ""} ${hideLabel ? "orbit-node--hide-label" : ""}`}
       style={style}
       onPointerDown={onPointerDown}
@@ -315,6 +367,8 @@ export function SideNodeNav() {
   const orbitModeRef = useRef<OrbitMode>("rest");
   const dockTravelTimer = useRef<number | null>(null);
   const compactRef = useRef(compact);
+  /** Resolved target for the active compact tap (geometry hit-test). */
+  const tapTargetRef = useRef<PageSectionId | null>(null);
 
   const radius = compact ? 140 : 172;
   const hitPad = 96;
@@ -725,6 +779,7 @@ export function SideNodeNav() {
       openGraph();
       pointerStart.current = null;
       dragDistance.current = 0;
+      tapTargetRef.current = null;
       return;
     }
     if (phase !== "expanded") return;
@@ -736,13 +791,18 @@ export function SideNodeNav() {
     dragDistance.current = 0;
     setDockHint(null);
 
-    // Mobile / compact: tap only — no hub drag or dock gestures.
+    // Mobile / compact: tap only — resolve by label/orb geometry so a tap
+    // on "Educación" is not stolen by a sibling orb stacked on top.
     if (compactRef.current) {
-      dragIdRef.current = id;
-      setDragId(id);
+      const picked =
+        pickOrbitIdAt(event.clientX, event.clientY, allIds) ?? id;
+      tapTargetRef.current = picked;
+      dragIdRef.current = picked;
+      setDragId(picked);
       return;
     }
 
+    tapTargetRef.current = null;
     dragIdRef.current = id;
     setDragId(id);
     setDragOffset({ x: 0, y: 0 });
@@ -792,9 +852,11 @@ export function SideNodeNav() {
     const moved = dragDistance.current > slop;
     const offset = { ...dragOffsetRef.current };
     const hint = id === HUB_ID ? dockFromOffset(offset, dock) : null;
+    const tapTarget = tapTargetRef.current;
     pointerStart.current = null;
     dragDistance.current = 0;
     dragIdRef.current = null;
+    tapTargetRef.current = null;
     setDragId(null);
     setDragOffset({ x: 0, y: 0 });
     dragOffsetRef.current = { x: 0, y: 0 };
@@ -804,8 +866,13 @@ export function SideNodeNav() {
 
     if (tapOnly) {
       orbitModeRef.current = "rest";
-      // Finger slipped: ignore. Clean tap: navigate / collapse via select.
-      if (!moved) selectAndContract(id);
+      if (moved) return;
+      // Re-pick at lift in case the finger settled on a neighbor label.
+      const picked =
+        pickOrbitIdAt(event.clientX, event.clientY, allIds) ??
+        tapTarget ??
+        id;
+      selectAndContract(picked);
       return;
     }
 
@@ -959,6 +1026,7 @@ export function SideNodeNav() {
             </svg>
 
             <OrbitNodeButton
+              id={HUB_ID}
               label={hubLabel}
               hub
               collapsed={phase === "idle"}
@@ -990,6 +1058,7 @@ export function SideNodeNav() {
                   return (
                     <OrbitNodeButton
                       key={section.id}
+                      id={section.id}
                       label={t(section.navKey)}
                       active={activeId === section.id}
                       hot={
@@ -1001,6 +1070,9 @@ export function SideNodeNav() {
                         {
                           "--orbit-x": `${pos.x}px`,
                           "--orbit-y": `${pos.y}px`,
+                          // Outer nodes paint above so their labels aren't
+                          // buried under a sibling orb box on touch.
+                          zIndex: 2 + Math.round(Math.hypot(pos.x, pos.y) / 24),
                         } as CSSProperties
                       }
                       onPointerDown={(event) =>

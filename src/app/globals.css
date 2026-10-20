@@ -705,6 +705,12 @@ html:active-view-transition body {
   touch-action: manipulation;
 }
 
+/* Labels must receive hits — they sit outside the orb box and were
+   falling through to a sibling node stacked on top. */
+.orbit-nav--compact .orbit-label {
+  pointer-events: auto;
+}
+
 /* Let taps in empty bloom pass through to the backdrop to close */
 .orbit-nav--compact .orbit-bloom-hit {
   pointer-events: none;
