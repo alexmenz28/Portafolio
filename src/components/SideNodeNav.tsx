@@ -829,7 +829,9 @@ export function SideNodeNav() {
   const collapsedLabel = t(
     PAGE_SECTIONS.find((section) => section.id === displayId)?.navKey ?? "hero",
   );
-  const hubLabel = graphOpen ? t("hero") : collapsedLabel;
+  // Only while fully open show "Inicio"; during close keep the section title
+  // on the hub so it never fades out and pops back in.
+  const hubLabel = phase === "expanded" ? t("hero") : collapsedLabel;
   const edgePad = 64;
   const hubPos = renderPos[HUB_ID] ?? { x: 0, y: 0 };
 
@@ -963,7 +965,7 @@ export function SideNodeNav() {
               active={phase === "idle" ? true : activeId === HUB_ID}
               hot={hoveredId === HUB_ID || dragId === HUB_ID}
               dragging={!compact && dragId === HUB_ID}
-              hideLabel={labelsHidden}
+              hideLabel={false}
               style={
                 {
                   "--orbit-x": `${hubPos.x}px`,
