@@ -25,8 +25,10 @@ type Dock = "bottom" | "left" | "right" | "top";
 type OrbitMode = "rest" | "hubDrag" | "dockTravel";
 type Point = { x: number; y: number };
 
-const LABEL_FADE_MS = 70;
-const CONTRACT_MS = 680;
+const LABEL_FADE_MS = 50;
+const CONTRACT_MS = 480;
+/** Even snappier collapse on touch — feels instant without a hard cut. */
+const CONTRACT_MS_COMPACT = 320;
 const LEAVE_CLOSE_MS = 90;
 const DRAG_CLICK_SLOP = 8;
 /** Looser tap slop on touch — fingers always jitter a few px. */
@@ -37,14 +39,16 @@ const DOCK_KEY = "portfolio-orbit-dock";
 /** Drag this far from rest (px) to arm a dock — no need to reach the screen edge. */
 const DOCK_ARM_PX = 96;
 /** How quickly satellites chase targets (0–1 per frame @60fps). */
-const FOLLOW = 0.11;
+const FOLLOW = 0.18;
+const FOLLOW_COMPACT = 0.28;
 /** Snappier once a sat's leash is taut. */
-const LEASH_FOLLOW = 0.16;
+const LEASH_FOLLOW = 0.22;
 /** Creamy ease into the new fan while the shell slides. */
-const FAN_SETTLE = 0.07;
-const SETTLE = 0.14;
+const FAN_SETTLE = 0.12;
+const SETTLE = 0.22;
 /** Faster ease when collapsing deployed nodes into the hub. */
-const CONTRACT = 0.22;
+const CONTRACT = 0.34;
+const CONTRACT_COMPACT = 0.48;
 /** Fallback if `transitionend` on `.orbit-anchor` does not fire. */
 const DOCK_SETTLE_MS = 750;
 
@@ -494,6 +498,9 @@ export function SideNodeNav() {
       let dirty = false;
       const next = { ...displayRef.current };
       const contracting = phaseNow === "closing" || !spreadOn;
+      const snappy = compactRef.current;
+      const followRate = snappy ? FOLLOW_COMPACT : FOLLOW;
+      const contractRate = snappy ? CONTRACT_COMPACT : CONTRACT;
 
       sats.forEach((section, index) => {
         const id = section.id;
@@ -504,12 +511,12 @@ export function SideNodeNav() {
         const rate = snap
           ? 1
           : contracting
-            ? CONTRACT + index * 0.015
+            ? contractRate + index * 0.02
             : mode === "hubDrag" && tautIds.has(id)
               ? LEASH_FOLLOW
               : mode === "dockTravel"
-                ? FAN_SETTLE + index * 0.008
-                : FOLLOW;
+                ? FAN_SETTLE + index * 0.01
+                : followRate;
         const x = cur.x + (target.x - cur.x) * rate;
         const y = cur.y + (target.y - cur.y) * rate;
         if (Math.abs(x - cur.x) > 0.05 || Math.abs(y - cur.y) > 0.05) {
@@ -527,7 +534,7 @@ export function SideNodeNav() {
         const target = targets[id] ?? { x: 0, y: 0 };
         const cur = next[id];
         const snap = reduced || id === drag;
-        const rate = snap ? 1 : contracting ? CONTRACT : SETTLE;
+        const rate = snap ? 1 : contracting ? contractRate : SETTLE;
         const x = cur.x + (target.x - cur.x) * rate;
         const y = cur.y + (target.y - cur.y) * rate;
         if (Math.abs(x - cur.x) > 0.05 || Math.abs(y - cur.y) > 0.05) {
@@ -632,10 +639,13 @@ export function SideNodeNav() {
       setSpread(false);
       spreadRef.current = false;
 
+      const contractMs = compactRef.current
+        ? CONTRACT_MS_COMPACT
+        : CONTRACT_MS;
       closeTimer.current = window.setTimeout(() => {
         setPhase("idle");
         setLabelsHidden(false);
-      }, LABEL_FADE_MS + CONTRACT_MS);
+      }, LABEL_FADE_MS + contractMs);
     },
     [clearCloseTimers, clearDockTravel],
   );
