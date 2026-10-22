@@ -82,6 +82,6 @@ export const profile = {
       stack: ["Fastify", "React", "Prisma", "PostgreSQL", "TypeScript"],
     };
   }),
-  sameAs: [social.github, social.site, social.kolki],
+  sameAs: [social.github, social.linkedin, social.site, social.kolki],
   seeking: "Remote full-stack TypeScript roles (US/EU/LATAM)",
 } as const;

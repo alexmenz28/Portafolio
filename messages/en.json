@@ -139,9 +139,10 @@
   },
   "Contact": {
     "title": "Contact",
-    "subtitle": "Available for remote TypeScript roles. Email or GitHub—or open a live product below.",
+    "subtitle": "Available for remote TypeScript roles. Email, LinkedIn, or GitHub—or open a live product below.",
     "email": "Email",
     "github": "GitHub",
+    "linkedin": "LinkedIn",
     "product": "Personal Memories",
     "kolki": "Kolki"
   },

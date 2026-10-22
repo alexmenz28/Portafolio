@@ -139,9 +139,10 @@
   },
   "Contact": {
     "title": "Contacto",
-    "subtitle": "Disponible para roles remotos en TypeScript. Email o GitHub—o abre un producto en vivo abajo.",
+    "subtitle": "Disponible para roles remotos en TypeScript. Correo, LinkedIn o GitHub—o abre un producto en vivo abajo.",
     "email": "Correo",
     "github": "GitHub",
+    "linkedin": "LinkedIn",
     "product": "Personal Memories",
     "kolki": "Kolki"
   },

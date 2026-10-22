@@ -1,7 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { GitHubIcon, GlobeIcon, MailIcon } from "@/components/Icons";
+import {
+  GitHubIcon,
+  GlobeIcon,
+  LinkedInIcon,
+  MailIcon,
+} from "@/components/Icons";
 import { ScrambleText } from "@/components/ScrambleText";
 import { usePageNavigation } from "@/contexts/PageNavigationContext";
 import { social } from "@/data/links";
@@ -48,6 +53,15 @@ export function HeroContent() {
           aria-label="Email"
         >
           <MailIcon size={22} />
+        </a>
+        <a
+          href={social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition hover:text-primary"
+          aria-label="LinkedIn"
+        >
+          <LinkedInIcon size={22} />
         </a>
         <a
           href={social.github}

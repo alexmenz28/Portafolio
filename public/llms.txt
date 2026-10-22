@@ -10,6 +10,7 @@ Alexander ships production web products end to end with TypeScript, Next.js, Rea
 
 - Email: alexander.mendoza.cholima2248@gmail.com
 - GitHub: https://github.com/alexmenz28
+- LinkedIn: https://www.linkedin.com/in/alexmenz28/
 - Prefer: remote TypeScript full-stack roles
 
 ## Featured projects

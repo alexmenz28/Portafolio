@@ -4,7 +4,12 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { AnimatedSectionHeading } from "@/components/AnimatedSectionHeading";
 import { Footer } from "@/components/Footer";
-import { GitHubIcon, GlobeIcon, MailIcon } from "@/components/Icons";
+import {
+  GitHubIcon,
+  GlobeIcon,
+  LinkedInIcon,
+  MailIcon,
+} from "@/components/Icons";
 import { PanelBody, PanelShell } from "@/components/PanelShell";
 import { ScrambleText } from "@/components/ScrambleText";
 import { social } from "@/data/links";
@@ -29,6 +34,13 @@ export function Contact() {
       label: t("email"),
       icon: <MailIcon size={16} />,
       primary: true,
+    },
+    {
+      id: "linkedin",
+      href: social.linkedin,
+      label: t("linkedin"),
+      icon: <LinkedInIcon size={16} />,
+      external: true,
     },
     {
       id: "github",
